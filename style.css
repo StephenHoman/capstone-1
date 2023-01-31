@@ -1,0 +1,8 @@
+.img-profile
+{
+     
+    width: 100%;
+    min-width: 1%;
+    flex-shrink: inherit;
+}
+/* <number> values */
