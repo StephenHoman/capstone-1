@@ -126,7 +126,9 @@ CREATE TABLE messages (
     receiver_user_id INT NOT NULL,
     message VARCHAR(250) NOT NULL,
     date_time_sent TIMESTAMP NOT NULL,
-    PRIMARY KEY (message_id)
+    PRIMARY KEY (message_id),
+    CONSTRAINT FK_message_sender FOREIGN KEY (sender_user_id) REFERENCES users(user_id),
+    CONSTRAINT FK_message_receiver FOREIGN KEY (receiver_user_id) REFERENCES users(user_id)
 )
 AUTO_INCREMENT = 100;
 
