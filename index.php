@@ -26,7 +26,10 @@
   </head>
   <body>
   
-  
+  <?
+    require_once("dBCred.PHP");
+    require_once("dbFunctions.php");
+  ?>
 
 <!-- Div main will scale with side bar, All divs must reside within--> 
 <!-- Div Main Start--> 
@@ -97,7 +100,7 @@
         <!-- Div Main  Start-->
         <div class="col py-3">
             <h1>Hello, world!</h1>
-            <?php require_once("dBCreate.PHP")?>
+             
         </div>
         <!-- Div Main  End-->
     </div>

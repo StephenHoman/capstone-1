@@ -5,7 +5,7 @@
 define("SERVER_NAME","localhost");
 define("DBF_USER_NAME", "root");
 define("DBF_PASSWORD", "mysql");
-define("DATABASE_NAME", "capstone");
+define("DATABASE_NAME", "mydatabase");
 
 // Create connection object
 $conn = new mysqli(SERVER_NAME, DBF_USER_NAME, DBF_PASSWORD);
@@ -15,3 +15,5 @@ if ($conn->connect_error) {
 } 
 else
 ?>
+
+ 
