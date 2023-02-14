@@ -7,7 +7,7 @@ USE myDatabase;
 CREATE TABLE login (
 	login_id INT NOT NULL AUTO_INCREMENT,
     user_username VARCHAR(25) NOT NULL,
-    user_password VARCHAR(25) NOT NULL,
+    user_password VARCHAR(255) NOT NULL,
     PRIMARY KEY (login_id)
 )
 AUTO_INCREMENT = 100;
@@ -132,13 +132,13 @@ CREATE TABLE messages (
 )
 AUTO_INCREMENT = 100;
 
-INSERT INTO login VALUES ('100', 'stormbatscorpionmars', 'g66HC73hLC92PvpKD4er');
-INSERT INTO login VALUES ('106', 'greenpepperspinach', '7WRLeeDASJkRJHw5L2DM');
-INSERT INTO login VALUES ('107', 'seallobster', 'UsP4YWRwSj8ZLR8UrZmy');
-INSERT INTO login VALUES ('109', 'scarface', 'd4EX3A4bQDhUd23smPVh');
-INSERT INTO login VALUES ('112', 'hamstergreenpepper', 'w2njwTmNqxUURzBSAg6V');
-INSERT INTO login VALUES ('123', 'babaisyou', 'sndfkjl345djklsfd');
-
+INSERT INTO login VALUES ('100', 'stormbatscorpionmars', '$2y$10$04hatJPH1ulOA1S8RPrC5efYbEA9lbANfx2IxlnxhneMozMMu13DO');
+INSERT INTO login VALUES ('101', 'greenpepperspinach', '$2y$10$04hatJPH1ulOA1S8RPrC5efYbEA9lbANfx2IxlnxhneMozMMu13DO');
+INSERT INTO login VALUES ('102', 'seallobster', '$2y$10$04hatJPH1ulOA1S8RPrC5efYbEA9lbANfx2IxlnxhneMozMMu13DO');
+INSERT INTO login VALUES ('103', 'scarface', '$2y$10$04hatJPH1ulOA1S8RPrC5efYbEA9lbANfx2IxlnxhneMozMMu13DO');
+INSERT INTO login VALUES ('104', 'hamstergreenpepper', '$2y$10$04hatJPH1ulOA1S8RPrC5efYbEA9lbANfx2IxlnxhneMozMMu13DO');
+INSERT INTO login VALUES ('105', 'babaisyou', '$2y$10$04hatJPH1ulOA1S8RPrC5efYbEA9lbANfx2IxlnxhneMozMMu13DO');
+ 
 INSERT INTO images VALUES ('100', 'yMiqytGk5RmjBZxfxjrw.png');
 INSERT INTO images VALUES ('101', 'hjskybcGh34HFbWibXJ3.jpg');
 INSERT INTO images VALUES ('102', 'vLv1hz3N13sk4lngEMec.png');
@@ -158,6 +158,8 @@ INSERT INTO users VALUES ('102', 'You can apply online if you want to.', 'matyfl
 INSERT INTO users VALUES ('103', 'Today is Sunday, which means tomorrow is Monday and yesterday was Saturday.', 'moiiashik82@indmeds.com', '109', '179', '9559 Harvard St.', '', 'RI', 'Providence', '29041', '2023-03-11', '2023-03-12', '6', '1');
 INSERT INTO users VALUES ('104', 'I started drinking when I was sixteen, but I''m European.', 'hodyuk79@boranora.com', '112', '181', '7105 Vale St.', 'Unit 21', 'PA', 'Allison Park', '15101', '2023-03-12', '2023-03-12', '7', '0');
 INSERT INTO users VALUES ('105', 'I pick you up in front of the hotel.', 'tarohanzawa@gotcertify.com', '123', '188', '789 Howard Court', 'Apartment 17', 'NY', 'Ozone Park', '11417', '2023-03-12', '2023-03-13', '66', '1');
+
+
 
 INSERT INTO users_login VALUES ('100', '100');
 INSERT INTO users_login VALUES ('101', '106');

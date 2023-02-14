@@ -1,20 +1,11 @@
 <?php
-// Initialize the session
-//session_destroy();
-session_start();
- 
-// Tell server that you will be tracking session variables
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-  header("location: user_page.php");
-  exit;
-}
+    // Include config file
+    require_once('DBCred.php');
+    // Include register file
+    require_once('php_register.php');
 ?>
- <?php
-    require_once("dBCred.PHP");
-    require_once("php_login.php");
-  ?>
-
-<!DOCTYPE html>
+ 
+ <!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -31,15 +22,11 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
    
 
     <title>Hello, world!</title>
-  </head>
-
-  <!-- Login Modal -->
- <!--  End       -->
- <div class="container mt-3">
-   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> Login </button>
- </div>
- <!-- The Modal -->
- <div class="modal fade" id="myModal">
+ <!-- SignUp Modal -->
+ <!--  START       --> 
+<div class="container mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal2"> Sign Up </button></div>
+ <!-- The Modal --><div class="modal fade" id="myModal2">
    <div class="modal-dialog">
      <div class="modal-content">
        <!-- Modal Header -->
@@ -50,8 +37,8 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
        <!-- Modal body -->
        <div class="modal-body">
          <form action="
-					<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-           <h3 class="mb-4">Login</h3>
+				<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+           <h3 class="mb-4">Sign Up</h3>
            <div class="input-group mb-3" <?= (!empty($username_err)) ? 'has-error' : ''; ?>>
              <input type="text" class="form-control" name="username" placeholder="username" value="<?= $username; ?>">
            </div>
@@ -60,16 +47,18 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
              <input type="password" class="form-control" name="password" placeholder="password" value="<?= $password; ?>">
            </div>
            <span class="help-block"> <?= $password_err; ?> </span>
+           <div class="input-group mb-4" <?= (!empty($confirm_password_err)) ? 'has-error' : ''; ?>>
+             <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" value="<?= $confirm_password; ?>">
+           </div>
+           <span class="help-block"> <?= $confirm_password_err; ?> </span>
            <div class="form-group text-left">
              <div class="checkbox checkbox-fill d-inline">
                <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
                <label for="checkbox-fill-a1" class="cr"> Save Details</label>
              </div>
            </div>
-           <button class="btn btn-primary shadow-2 mb-4">Login</button>
-           <p class="mb-2 text-muted"><a href="signup.php">Create Account</a>
-           </p>
-            
+           <button class="btn btn-primary shadow-2 mb-4">Sign up</button>
+           <p class="mb-0 text-muted">Already have an account? <a href="auth-signin.html"> Log in</a>
            </p>
          </form>
        </div>
@@ -80,14 +69,13 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
      </div>
    </div>
  </div>
- <!-- Login Modal -->
- <!--  End       -->
+<!-- SignUp Modal -->
+ <!--  End       --> 
 
- 
-    
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>  </body>
-</html>
+
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>  </body>
+  </html>
