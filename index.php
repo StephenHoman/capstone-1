@@ -32,8 +32,8 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
     <title>Log in</title>
   </head>
-  <div class="container text-center  menuBG ">
-  <div class="row menuBG ">
+  <div class="container text-center   ">
+  <div class="row ">
 
   <div class=" col align-self-start "></div>
 
@@ -41,7 +41,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     <div class=" col  align-self-center ">
     
 
-    <div class="card menuBG " style="background-color:  rgb(243, 243, 243);padding: 5px;margin-top: 15%;border: solid rgba(0, 0, 0, .15);border-width: 1px 0;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);" >
+    <div class="card menuBG"  >
    
     <div id="carouselLogin" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
@@ -61,10 +61,10 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
 
 
-  <div class="card-body menuBG  ">
+  <div class="card-body ">
     <h5 class="card-title">Signup or login!</h5>
       <!-- Login Modal -->
-      <div class="container mt-3 menuBG">
+      <div class="container mt-3 ">
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> Login </button>
  </div>
   </div>
