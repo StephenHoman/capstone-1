@@ -30,14 +30,53 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
      
    
 
-    <title>Hello, world!</title>
+    <title>Log in</title>
   </head>
+  <div class="container text-center  menuBG ">
+  <div class="row menuBG ">
 
-  <!-- Login Modal -->
- <!--  End       -->
- <div class="container mt-3">
-   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> Login </button>
+  <div class=" col align-self-start "></div>
+
+
+    <div class=" col  align-self-center ">
+    
+
+    <div class="card menuBG " style="background-color:  rgb(243, 243, 243);padding: 5px;margin-top: 15%;border: solid rgba(0, 0, 0, .15);border-width: 1px 0;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);" >
+   
+    <div id="carouselLogin" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="photos/landing-images/pexels-erik-mclean-5543136.jpg" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="photos/landing-images/pexels-cottonbro-studio-5090640.jpg" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="photos/landing-images/pexels-tima-miroshnichenko-6827340.jpg" class="d-block w-100" alt="...">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  <div class="card-body menuBG  ">
+    <h5 class="card-title">Signup or login!</h5>
+      <!-- Login Modal -->
+      <div class="container mt-3 menuBG">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> Login </button>
  </div>
+  </div>
+</div>
+</div><!-- end col -->
+
+<div class="col   align-self-end"></div>
+
+     
+     </div><!-- end row --> 
+   </div> <!-- end container -->
+ 
  <!-- The Modal -->
  <div class="modal fade" id="myModal">
    <div class="modal-dialog">

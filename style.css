@@ -6,3 +6,14 @@
     flex-shrink: inherit;
 }
 /* <number> values */
+
+.menuBG
+{  
+     
+    background-color: rgb(243, 243, 243);
+    padding: 5px;
+    margin-top: 25% !important;  
+    border: solid rgba(0, 0, 0, .15);
+    border-width: 1px 0;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);  
+} 
