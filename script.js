@@ -4,3 +4,5 @@ function size(){
     document.getElementById("profile").style.width = "75px";
     
   }}
+
+ 

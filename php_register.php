@@ -99,7 +99,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             if(mysqli_stmt_execute($stmt))
             {
                 // Redirect to login page
-                header("location: index.php");
+               // header("location: index.php");
                 echo "success";
             } 
                 else

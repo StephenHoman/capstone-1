@@ -10,6 +10,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 ?>
 <?php
     require_once("dBCred.PHP");
+    require_once("update_user.php");
+     
  
   ?>
 
@@ -52,7 +54,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                 <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <img src="photos/profile_image/default.webp" class="img-rounded img-profile embed-responsive " id="profile" alt="profile image"> 
+                <img src="photos/fillerlogo.jpg" class="img-rounded img-profile embed-responsive " id="profile" alt="profile image"> 
                 </a>
                 <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">#<?php echo $_SESSION['id']; ?> - <?php echo $_SESSION['username']; ?> </span>
@@ -64,47 +66,47 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         </a>
                     </li>
                     <li>
-                        <a href="#submenu1" data-bs-toggle="collapse" role="button" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-                        <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                        <a href="#submenu1" data-bs-toggle="collapse" role="button" class="nav-link px-0 align-start">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Dashboard</span> </a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                             <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
+                                <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Item</span> 1 </a>
                             </li>
                             <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
+                                <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Item</span> 2 </a>
                             </li>
                         </ul>
                     </li>
  
                     <li>
                         <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Orders</span></a>
                     </li>
-                    <li>
+                    <li  class="w-100">
                         <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
+                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Bootstrap</span></a>
                         <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                             <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
+                                <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Item</span> 1</a>
                             </li>
                             <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
+                                <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Item</span> 2</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Categories</span> </a>
+                            <i class="fs-4 bi-grid"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Settings</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
                             <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
+       <!-- userModal button --> <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline"><button type="button" class="styledBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Update Info</button></span></a>
                             </li>
                             
                         </ul>
                     </li>
                     <li>
                         <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline"><p class="text-muted"><a href="logout.php">Logout</a></p></span> </a>
+                            <i class="fs-4 bi-people"></i> <span class="ms-1   d-sm-inline"><p class="text-muted"><a href="logout.php">Logout</a></p></span> </a>
                     </li>
                 </ul>
                 <hr>
@@ -113,7 +115,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
           </div>
         <!-- Div Main  Start-->
         <div class="col py-3">
-            <h1>User Page</h1>
              
 
             
@@ -144,19 +145,63 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 {                    
                      
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $user_id, $user_description, $email, $login_id,$image_id, $address_line_one, $address_line_two, $state, $city, $zip_code, $account_creation_date, $last_online, $transaction_count, $premium);
+                    mysqli_stmt_bind_result($stmt, $user_id, $user_description, $email, $login_id, $image_id, $address_line_one, $address_line_two, $state, $city, $zip_code, $account_creation_date, $last_online, $transaction_count, $premium);
                     while (mysqli_stmt_fetch($stmt)) {
-                        printf(" %d %s %s %d %d %s %s %s %s %d %d %d %d %d \n", $user_id, $user_description, $email, $login_id,$image_id, $address_line_one, $address_line_two, $state, $city, $zip_code, $account_creation_date, $last_online, $transaction_count, $premium);
+                        printf(" %d %s %s %d %d %s %s %s %s %d %d %d %d %d \n", $user_id, $user_description, $email, $login_id, $image_id, $address_line_one, $address_line_two, $state, $city, $zip_code, $account_creation_date, $last_online, $transaction_count, $premium);
                         
                         echo $email ."<br>";
                     }
+                    mysqli_stmt_close($stmt);
                 }
+            }
+        }
+
+        $sql = "SELECT image_url FROM mydatabase.images WHERE image_id = ?";
+        if($stmt = mysqli_prepare($conn, $sql))
+        {
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_id);
+            $param_id = $image_id;
+            if(mysqli_stmt_execute($stmt))
+            { 
+                 
+                // Store result
+                mysqli_stmt_store_result($stmt);
+                // Check if username exists, if yes then verify password
+                if(mysqli_stmt_num_rows($stmt) == 1)
+                {                    
+                     
+                    // Bind result variables
+                    mysqli_stmt_bind_result($stmt, $image_url);
+                    while (mysqli_stmt_fetch($stmt)) {
+                        $_SESSION['image_url'] = $image_url;
+                        printf("%s \n", $image_url);
+                         
+                    }
+                }
+                mysqli_stmt_close($stmt);
             }
         }
 
 
                 ?>
         </div>
+        <div class="col py-3">
+             
+            <div class="container text-center">
+            <div class="row">
+            <div class="col">
+            <img src="<?php echo $_SESSION['image_url']; ?>" class="img-rounded img-profile embed-responsive " id="profile" alt="profile image"> 
+            </div>
+            <div class="col">
+            Column
+            </div>
+            <div class="col">
+            Column
+            </div>
+            </div>
+            </div>
+         
 		 
 
 
@@ -167,9 +212,94 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     </div>
 </div>
 
+<!-- user info update modal start --> 
+<!-- The Modal -->
+<div class="modal" id="userModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Update Info</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <?php
+     
+  ?>
+      <!-- Modal body -->
+      <div class="modal-body">
+       
+         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
+           <h3 class="mb-4"> <?php echo $_SESSION['username']; ?> </h3>
+             
  
+           <div class="mb-3">
+              <label for="formFile" class="form-label">Upload a new Profile Image</label>
+                <input class="form-control" type="file" id="formFile" name="formFile"  >
+            </div>
 
 
+
+            
+           <div class="mb-3 row">
+                <label for="staticEmail" class="col-sm-5 col-form-label">Email</label>
+            <div class="col-sm-7">
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="<?=$email;?>">
+            </div>
+            </div>
+            
+            <div class="mb-3 row">
+            <label for="inputPassword" class="col-sm-5 col-form-label">Address Line One</label>
+            <div class="col-sm-7">
+            <input type="text" class="form-control" id="addressLineOne" name="addressLineOne" placeholder="<?=$address_line_one;?>">
+            </div>
+            </div>
+
+            <div class="mb-3 row">
+            <label for="inputPassword" class="col-sm-5 col-form-label">Address Line Two</label>
+            <div class="col-sm-7">
+            <input type="text" class="form-control" id="addressLineTwo" name="addressLineTwo" placeholder="<?=$address_line_two;?>">
+            </div>
+            </div>
+
+            <div class="mb-3 row">
+            <label for="inputPassword" class="col-sm-1 col-form-label">State</label>
+            <div class="col-sm-2">
+            <input type="text" class="form-control" id="state" name="state"  placeholder="<?=$state;?>">
+            </div>
+            <label for="inputPassword" class="col-sm-1 col-form-label">City</label>
+            <div class="col-sm-4">
+            <input type="text" class="form-control" id="city" name="city"  placeholder="<?=$city;?>">
+            </div>
+            <label for="inputPassword" class="col-sm-1 col-form-label">Zip</label>
+            <div class="col-sm-3">
+            <input type="text" class="form-control" id="zip"name="zip" placeholder="<?=$zip_code;?>">
+            </div>
+            </div>
+
+            <div class="g-3 row">
+            <label for="description" class="col-sm-12 col-form-label">User Description</label>
+            <textarea class="form-control" maxlength="200" rows="4" id="userDescription" name="userDescription" placeholder="<?=$user_description;?>"></textarea> 
+            <p class="h6 text-muted small">limit 200 Characters</p>
+            </div>
+
+              
+            
+           <button class="btn btn-primary shadow-2 mb-4">Update Info</button>
+           
+         </form>
+        
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- user info update modal end --> 
 
 
 
