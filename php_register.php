@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 // Define variables and initialize with empty values
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
@@ -98,8 +101,33 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt))
             {
-                // Redirect to login page
-               // header("location: index.php");
+                
+                // Prepare an insert statement
+            $sql = "SELECT  login_id FROM mydatabase.login WHERE user_username = ?";
+         
+            if($stmt = mysqli_prepare($conn, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_username);
+            
+            // Set parameters
+            $param_username = $username;
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt))
+            {
+                mysqli_stmt_store_result($stmt);
+                // Check if username exists, if yes then verify password
+                if(mysqli_stmt_num_rows($stmt) == 1)
+                {                    
+                    echo "found user";
+                    // Bind result variables
+                    mysqli_stmt_bind_result($stmt, $login_id );
+                    if(mysqli_stmt_fetch($stmt))         
+                    $_SESSION["id"] = $login_id;
+                    $_SESSION["username"] = $param_username;
+
+                    header("location: signup_details.php");
+
                 echo "success";
             } 
                 else
@@ -108,8 +136,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             }
             // Close statement
             mysqli_stmt_close($stmt);
-       // }
-    }
+        }}
+    }}}
     // Close connection
     mysqli_close($conn);
-        }}
+}

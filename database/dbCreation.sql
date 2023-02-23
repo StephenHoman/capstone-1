@@ -145,7 +145,7 @@ INSERT INTO images VALUES ('102', 'vLv1hz3N13sk4lngEMec.png');
 INSERT INTO images VALUES ('103', 'YsYwN65EZsdtDnn5JZKM.png');
 INSERT INTO images VALUES ('104', 'dfgsdfrgdfsgdsgf.jpg');
 INSERT INTO images VALUES ('105', 'osdlijsfjdkl.jpg');
-INSERT INTO images VALUES ('137', 'awqsdsadsfed.png');
+INSERT INTO images VALUES ('137', 'photos/profile_image/default.webp');
 INSERT INTO images VALUES ('176', 'ghrtedqawed.png');
 INSERT INTO images VALUES ('177', 'eashfj.png');
 INSERT INTO images VALUES ('179', 'asddfssdf.png');
