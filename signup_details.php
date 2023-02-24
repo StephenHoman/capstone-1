@@ -37,7 +37,7 @@
     Featured
   </div>
   <div class="card-body">
-  <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
+  <form action=" php_registerDetails.php" method="POST" enctype="multipart/form-data">
            <h3 class="mb-4"> <?php echo $_SESSION['username']; ?> </h3>
              
  
@@ -45,14 +45,14 @@
               <label for="formFile" class="form-label">Upload a new Profile Image</label>
                 <input class="form-control" type="file" id="formFile" name="formFile"  >
             </div>
-
-
+                
+            <input  type="hidden" id="login_id" name="login_id" value= "<?=$_SESSION['id'];?>" >
 
             
            <div class="mb-3 row">
                 <label for="staticEmail" class="col-sm-5 col-form-label">Email</label>
             <div class="col-sm-7">
-                <input type="text"  class="form-control" id="staticEmail" >
+                <input type="text"  class="form-control" id="email" name="email" >
             </div>
             </div>
             
