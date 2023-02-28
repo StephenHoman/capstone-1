@@ -146,12 +146,20 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                      
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $user_id, $user_description, $email, $login_id, $image_id, $address_line_one, $address_line_two, $state, $city, $zip_code, $account_creation_date, $last_online, $transaction_count, $premium);
+                    
                     while (mysqli_stmt_fetch($stmt)) {
                         printf(" %d %s %s %d %d %s %s %s %s %d %d %d %d %d \n", $user_id, $user_description, $email, $login_id, $image_id, $address_line_one, $address_line_two, $state, $city, $zip_code, $account_creation_date, $last_online, $transaction_count, $premium);
                         
                         echo $email ."<br>";
+                        $_SESSION['USERID'] = $user_id;
+                    $_SESSION['LOGINID'] = $login_id;
+                        
+                        
                     }
+
                     mysqli_stmt_close($stmt);
+                    
+                       
                 }
             }
         }
@@ -183,6 +191,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             }
         }
 
+        require_once('checkFK.php');
 
                 ?>
         </div>

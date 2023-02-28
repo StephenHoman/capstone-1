@@ -11,14 +11,37 @@ function uploadProfileImage($photoInput) {
     $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
     $hashedName = hash('sha256', time() . $fileName) . '.' . $fileType;
     $targetFile = $uploadDir . '/' . $hashedName;
+    $_SESSION['image_url'] = $targetFile;
+    require_once("dBCred.PHP");
 
     // Move uploaded file to new location with new name
     if (move_uploaded_file($tempName, $targetFile)) {
-        return $targetFile;
+             // Prepare an insert statement
+             $sql = "INSERT INTO mydatabase.images (image_id, image_url ) VALUES (Null, ?)";
+         
+             if($stmt = mysqli_prepare($conn, $sql)){
+                 // Bind variables to the prepared statement as parameters
+                 mysqli_stmt_bind_param($stmt, "s", $param_image_url);
+                 
+                 // Set parameters
+                 $param_image_url = $_SESSION['image_url'];
+                 // Attempt to execute the prepared statement
+                 if(mysqli_stmt_execute($stmt))
+                 {
+                    return $param_image_url;
+                 }
+                 else
+                 {
+                        echo "image Failed- sql error";
+                 }
+                }
+
     } else {
+        
         return 'photos/profile_image/default.webp';
     }
 }
+
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST")
 { 
@@ -29,9 +52,34 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             if ($newFileName) {
                 // File was uploaded successfully
                 echo 'File was uploaded successfully with name ' . $newFileName;
+                $sql = "SELECT image_id FROM mydatabase.images WHERE image_url = ?";
+                if($stmt = mysqli_prepare($conn, $sql))
+                {
+                    // Bind variables to the prepared statement as parameters
+                    mysqli_stmt_bind_param($stmt, "s", $param_image_url);
+                    $param_image_url = $newFileName;
+                    if(mysqli_stmt_execute($stmt))
+                    { 
+                         
+                        // Store result
+                        mysqli_stmt_store_result($stmt);
+                        // Check if username exists, if yes then verify password
+                        if(mysqli_stmt_num_rows($stmt) == 1)
+                        {                    
+                             
+                            // Bind result variables
+                            mysqli_stmt_bind_result($stmt, $image_id);
+                            while (mysqli_stmt_fetch($stmt)) {
+                                $_SESSION['image_id'] = $image_id;
+
+                            }
+                        }}}
             } else {
                 echo 'Error moving uploaded file.';
+
             }
+            $_SESSION['image_id'] = $image_id;
+
         }
      
     
@@ -42,8 +90,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         if(empty($username_err) && empty($password_err) && empty($confirm_password_err))
         {   
             $email            = trim($_POST["email"]);
-            $login_id          = trim($_POST["login_id"]);
-            $image_id         = $newFileName;
+            $login_id         = trim($_POST["login_id"]);
+            $image_id         = $_SESSION['image_id'];
+            
             $address_line_one = trim($_POST["addressLineOne"]);
             $state            = trim($_POST["state"]);
             $city             = trim($_POST["city"]);
@@ -56,7 +105,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                
               if($stmt = mysqli_prepare($conn, $sql)){
                   // Bind variables to the prepared statement as parameters
-                  mysqli_stmt_bind_param($stmt, "ssssssiii",  $param_email, $param_login_id, $param_image_id, $param_address_line_one, $param_state, $param_city, $param_zip, $param_transaction_count, $param_premium_user);
+                  mysqli_stmt_bind_param($stmt, "ssisssiii",  $param_email, $param_login_id, $param_image_id, $param_address_line_one, $param_state, $param_city, $param_zip, $param_transaction_count, $param_premium_user);
                   
                   $param_email = $email;
                   $param_login_id = $login_id;
@@ -68,20 +117,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                   $param_transaction_count = $transaction_count;
                   $param_premium_user = $premium_user;
                    
-                  
+ 
                   // Attempt to execute the prepared statement
                   if(mysqli_stmt_execute($stmt))
                   {
                     
-                          if(mysqli_stmt_fetch($stmt))         
-                            {
-                            header("location: index.php");
-                            session_destroy();
                             echo "success";
-                            }
-                        } 
+                
+                  }
                       else
                   {
+                      echo("Failed to execute the prepared statement: " . mysqli_stmt_error($stmt));
                       echo "Something went wrong. Please try again later.";
                   }
                   // Close statement
@@ -118,7 +164,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
      else
     {
         $address_line_two = trim($_POST["addressLineTwo"]);
-
+        $login_id          = trim($_POST["login_id"]);
         $sql = "UPDATE mydatabase.users SET address_line_one = '$address_line_two' WHERE login_id = ?";
         if ($stmt = mysqli_prepare($conn, $sql)) {
             // Bind variables to the prepared statement as parameters
@@ -143,6 +189,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     else
     {
         $user_description = trim($_POST["userDescription"]);
+        $login_id          = trim($_POST["login_id"]);
 
         $sql = "UPDATE mydatabase.users SET user_description = '$user_description' WHERE login_id = ?";
         if ($stmt = mysqli_prepare($conn, $sql)) {
@@ -159,5 +206,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             }
         }
     }
+
+
+    header("location: index.php");
+    session_destroy();
 
 }
