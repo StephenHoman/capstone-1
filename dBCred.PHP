@@ -8,12 +8,15 @@ define("DBF_PASSWORD", "mysql");
 define("DATABASE_NAME", "mydatabase");
 
 // Create connection object
-$conn = new mysqli(SERVER_NAME, DBF_USER_NAME, DBF_PASSWORD);
+$conn = new mysqli(SERVER_NAME, DBF_USER_NAME, DBF_PASSWORD, DATABASE_NAME);
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 else
+{
+   
+}
 ?>
 
  

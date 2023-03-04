@@ -153,19 +153,19 @@ INSERT INTO images VALUES ('181', 'jrtyhggfhgv.png');
 INSERT INTO images VALUES ('188', 'iojakhddsa.jpg');
 
 INSERT INTO users VALUES ('100', 'I sell used video games.', 'blahblahblah@blah.com', '100', '137', '766 South Ave.', '', 'GA', 'Duluth', '30096', '2023-02-07', '2023-02-08', '5', '1');
-INSERT INTO users VALUES ('101', 'She didn''t drink, but she didn''t want people to realize that, so she ordered a ginger ale at the bar.', 'aleksandrabronov@24hinbox.com', '106', '176', '53 Marshall Road', '', 'VA', 'Gainesville', '20155', '2023-02-11', '2023-02-11', '1', '1');
-INSERT INTO users VALUES ('102', 'You can apply online if you want to.', 'matyflex14gb@taikz.com', '107', '177', '7283 Cambridge Drive', 'Apartment 3', 'KS', 'Emporia', '66801', '2023-02-17', '2023-03-02', '0', '0');
-INSERT INTO users VALUES ('103', 'Today is Sunday, which means tomorrow is Monday and yesterday was Saturday.', 'moiiashik82@indmeds.com', '109', '179', '9559 Harvard St.', '', 'RI', 'Providence', '29041', '2023-03-11', '2023-03-12', '6', '1');
-INSERT INTO users VALUES ('104', 'I started drinking when I was sixteen, but I''m European.', 'hodyuk79@boranora.com', '112', '181', '7105 Vale St.', 'Unit 21', 'PA', 'Allison Park', '15101', '2023-03-12', '2023-03-12', '7', '0');
-INSERT INTO users VALUES ('105', 'I pick you up in front of the hotel.', 'tarohanzawa@gotcertify.com', '123', '188', '789 Howard Court', 'Apartment 17', 'NY', 'Ozone Park', '11417', '2023-03-12', '2023-03-13', '66', '1');
+INSERT INTO users VALUES ('101', 'She didn''t drink, but she didn''t want people to realize that, so she ordered a ginger ale at the bar.', 'aleksandrabronov@24hinbox.com', '101', '176', '53 Marshall Road', '', 'VA', 'Gainesville', '20155', '2023-02-11', '2023-02-11', '1', '1');
+INSERT INTO users VALUES ('102', 'You can apply online if you want to.', 'matyflex14gb@taikz.com', '102', '177', '7283 Cambridge Drive', 'Apartment 3', 'KS', 'Emporia', '66801', '2023-02-17', '2023-03-02', '0', '0');
+INSERT INTO users VALUES ('103', 'Today is Sunday, which means tomorrow is Monday and yesterday was Saturday.', 'moiiashik82@indmeds.com', '103', '179', '9559 Harvard St.', '', 'RI', 'Providence', '29041', '2023-03-11', '2023-03-12', '6', '1');
+INSERT INTO users VALUES ('104', 'I started drinking when I was sixteen, but I''m European.', 'hodyuk79@boranora.com', '104', '181', '7105 Vale St.', 'Unit 21', 'PA', 'Allison Park', '15101', '2023-03-12', '2023-03-12', '7', '0');
+INSERT INTO users VALUES ('105', 'I pick you up in front of the hotel.', 'tarohanzawa@gotcertify.com', '105', '188', '789 Howard Court', 'Apartment 17', 'NY', 'Ozone Park', '11417', '2023-03-12', '2023-03-13', '66', '1');
 
 
 
 INSERT INTO users_login VALUES ('100', '100');
-INSERT INTO users_login VALUES ('101', '106');
-INSERT INTO users_login VALUES ('102', '107');
-INSERT INTO users_login VALUES ('103', '109');
-INSERT INTO users_login VALUES ('104', '112');
+INSERT INTO users_login VALUES ('101', '101');
+INSERT INTO users_login VALUES ('102', '102');
+INSERT INTO users_login VALUES ('103', '103');
+INSERT INTO users_login VALUES ('104', '104');
 
 INSERT INTO users_image VALUES ('100', '137');
 INSERT INTO users_image VALUES ('101', '176');
