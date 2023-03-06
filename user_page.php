@@ -79,8 +79,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     </li>
  
                     <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Orders</span></a>
+                        <a href="create_item.php" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">List Item</span></a>
                     </li>
                     <li  class="w-100">
                         <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
@@ -152,7 +152,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         
                         echo $email ."<br>";
                         $_SESSION['USERID'] = $user_id;
-                    $_SESSION['LOGINID'] = $login_id;
+                        $_SESSION['LOGINID'] = $login_id;
+                        $_SESSION['IMAGEID'] = $image_id;
                         
                         
                     }

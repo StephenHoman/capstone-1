@@ -1,54 +1,59 @@
 <?php
- 
+require_once("dBCred.PHP");
 // Define variables and initialize with empty values
 $user_description = $zip_code = $city = $state = $address_line_two = $address_line_one    = "";
-require_once("dBCred.PHP");
 
-function uploadProfileImage($photoInput) {
+
+function uploadProfileImage($photoInput, $conn)  {
     $uploadDir = 'photos/profile_image';
     $tempName = $photoInput['tmp_name'];
     $fileName = basename($photoInput['name']);
     $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
     $hashedName = hash('sha256', time() . $fileName) . '.' . $fileType;
     $targetFile = $uploadDir . '/' . $hashedName;
+    $directory =  $targetFile;
     $_SESSION['image_url'] = $targetFile;
     require_once("dBCred.PHP");
 
     // Move uploaded file to new location with new name
-    if (move_uploaded_file($tempName, $targetFile)) {
-             // Prepare an insert statement
-             $sql = "INSERT INTO mydatabase.images (image_id, image_url ) VALUES (Null, ?)";
-         
-             if($stmt = mysqli_prepare($conn, $sql)){
-                 // Bind variables to the prepared statement as parameters
-                 mysqli_stmt_bind_param($stmt, "s", $param_image_url);
-                 
-                 // Set parameters
-                 $param_image_url = $_SESSION['image_url'];
-                 // Attempt to execute the prepared statement
-                 if(mysqli_stmt_execute($stmt))
-                 {
-                    return $param_image_url;
-                 }
-                 else
-                 {
-                        echo "image Failed- sql error";
-                 }
-                }
-
-    } else {
-        
+    if(move_uploaded_file($tempName, $targetFile)){
+        // Prepare an insert statement
+     
+        $sql = "INSERT INTO mydatabase.images (image_id, image_url) VALUES (NULL, ?)";
+     
+        if($stmt = mysqli_prepare($conn, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_image_url);
+             
+            // Set parameters
+            $param_image_url = $directory;
+        }
+        else{
+            echo "failed at line 24";
+        }
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt))
+            { echo mysqli_error($conn);
+                return $directory;
+            }
+            else
+            {echo mysqli_error($conn);
+                echo "image Failed- sql error";
+            }
+        }
+     
         return 'photos/profile_image/default.webp';
-    }
+    
 }
-
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST")
 { 
      
         if (isset($_FILES['formFile']) && $_FILES['formFile']['error'] == UPLOAD_ERR_OK) {
             // File was uploaded successfully
-            $newFileName = uploadProfileImage($_FILES['formFile']);
+            require_once("dBCred.PHP");
+            $newFileName = uploadProfileImage($_FILES['formFile'], $conn);
+            $_SESSION['image_url'] = $newFileName;
             if ($newFileName) {
                 // File was uploaded successfully
                 echo 'File was uploaded successfully with name ' . $newFileName;
@@ -57,7 +62,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                 {
                     // Bind variables to the prepared statement as parameters
                     mysqli_stmt_bind_param($stmt, "s", $param_image_url);
-                    $param_image_url = $newFileName;
+                    $param_image_url =  $newFileName  ;
                     if(mysqli_stmt_execute($stmt))
                     { 
                          
@@ -78,7 +83,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                 echo 'Error moving uploaded file.';
 
             }
-            $_SESSION['image_id'] = $image_id;
+            
 
         }
      
@@ -97,16 +102,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             $state            = trim($_POST["state"]);
             $city             = trim($_POST["city"]);
             $zip              = trim($_POST["zip"]);
-            
+            $user_description = trim($_POST["userDescription"]);
             $transaction_count= 0;
             $premium_user     = 0;
             // Prepare an insert statement
-              $sql = "INSERT INTO mydatabase.users (user_id, email, login_id, image_id, address_line_one, users.state, city, zip_code, account_creation_date, last_online, transaction_count, premium_user) VALUES (Null, ?, ?, ?, ?, ?, ?, ?, CURDATE(), CURDATE(), ?, ?)";
+              $sql = "INSERT INTO mydatabase.users (user_id, user_description, email, login_id, image_id, address_line_one, users.state, city, zip_code, account_creation_date, last_online, transaction_count, premium_user) VALUES (Null, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), CURDATE(), ?, ?)";
                
               if($stmt = mysqli_prepare($conn, $sql)){
                   // Bind variables to the prepared statement as parameters
-                  mysqli_stmt_bind_param($stmt, "ssisssiii",  $param_email, $param_login_id, $param_image_id, $param_address_line_one, $param_state, $param_city, $param_zip, $param_transaction_count, $param_premium_user);
+                  mysqli_stmt_bind_param($stmt, "sssisssiii",  $param_user_description, $param_email, $param_login_id, $param_image_id, $param_address_line_one, $param_state, $param_city, $param_zip, $param_transaction_count, $param_premium_user);
                   
+                  $param_user_description = $user_description;
                   $param_email = $email;
                   $param_login_id = $login_id;
                   $param_image_id = $image_id;
