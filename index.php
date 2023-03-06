@@ -65,7 +65,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     <h5 class="card-title">Signup or login!</h5>
       <!-- Login Modal -->
       <div class="container mt-3 ">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> Login </button>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> New and Existing users </button>
  </div>
   </div>
 </div>

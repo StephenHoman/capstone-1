@@ -24,10 +24,9 @@ if (isset($_SESSION['LOGINID']) && isset($_SESSION['USERID'])){
                 
                 echo "success";
             }
-        } else {
+         else {
             echo "error1";
-        }
-            
+         
         // Prepare an insert statement
         $sql = "INSERT INTO mydatabase.users_login (login_id, user_id) VALUES (?, ?)";
          
@@ -49,10 +48,11 @@ if (isset($_SESSION['LOGINID']) && isset($_SESSION['USERID'])){
             // Close statement
             mysqli_stmt_close($stmt);
         }
-    }
+    }}
 }
-if (isset($_SESSION['LOGINID']) && isset($_SESSION['IMAGEID'])) {
-    $sql = "SELECT login_id FROM mydatabase.users_login WHERE user_id = ?";
+}
+if (isset($_SESSION['USERID']) && isset($_SESSION['IMAGEID'])) {
+    $sql = "SELECT image_id FROM mydatabase.users_image WHERE user_id = ?";
          
     if ($stmt = mysqli_prepare($conn, $sql)) {
         // Bind variables to the prepared statement as parameters
@@ -69,13 +69,12 @@ if (isset($_SESSION['LOGINID']) && isset($_SESSION['IMAGEID'])) {
                 echo "found user";
                 // Bind result variables
                 mysqli_stmt_bind_result($stmt, $login_id);
-                
+                             
                 echo "success";
             }
-        } else {
+         else {
             echo "error1";
-        }
-            
+           
         // Prepare an insert statement
         $sql = "INSERT INTO mydatabase.users_image (user_id, image_id) VALUES (?, ?)";
          
@@ -97,7 +96,8 @@ if (isset($_SESSION['LOGINID']) && isset($_SESSION['IMAGEID'])) {
             // Close statement
             mysqli_stmt_close($stmt);
         }
-    }
+    }}
+}
 }
 
 
