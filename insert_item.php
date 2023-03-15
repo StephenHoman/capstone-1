@@ -86,21 +86,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             
                     }
                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             $item_name =  trim($_POST['name']);
             $item_description =  trim($_POST['description']);
             $price =  trim($_POST['price']);
@@ -128,6 +113,55 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             if ($result = $conn->query($sql) == TRUE) {
         
                 $_SESSION['message'] = "item been created sucessfully!";
+                
+
+
+                $sql = "SELECT item_id FROM mydatabase.items WHERE image_id = ?";
+            if($stmt = mysqli_prepare($conn, $sql))
+            {
+                // Bind variables to the prepared statement as parameters
+                mysqli_stmt_bind_param($stmt, "s", $param_image_id);
+                $param_image_id =  $image_id;
+                if(mysqli_stmt_execute($stmt))
+                { 
+                    // Store result
+                    mysqli_stmt_store_result($stmt);
+                    // Check if username exists, if yes then verify password
+                    if(mysqli_stmt_num_rows($stmt) == 1)
+                    {                    
+                        // Bind result variables
+                        mysqli_stmt_bind_result($stmt, $item_id);
+                        while (mysqli_stmt_fetch($stmt)) {
+                            $_SESSION['item_id'] = $item_id;
+            
+                                        }
+                                    }}}
+                        } else {
+                            echo 'Error moving uploaded file.';
+            
+                        }
+
+                $sql = "INSERT INTO mydatabase.item_images( item_id, image_id) VALUES (?,?) ";
+                if ($stmt = mysqli_prepare($conn, $sql)) {
+                    // Bind variables to the prepared statement as parameters
+                    mysqli_stmt_bind_param($stmt, "ii", $param_item_id, $param_image_id);
+                    
+                    // Set parameters
+                    $param_item_id = $item_id;
+                    $param_image_id =  $image_id ;
+                    
+                    // Attempt to execute the prepared statement
+                    if (mysqli_stmt_execute($stmt)) {
+                        
+                    } else {
+                        echo "error2";
+                    }
+
+                    // Close statement
+                    mysqli_stmt_close($stmt);
+                }
+
+
                 mysqli_close($conn);
                 header("Location: user_page.php");
                 exit;
@@ -139,8 +173,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
 
  
-                    }
-                
+                    
+            
 
 
 

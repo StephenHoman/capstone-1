@@ -342,7 +342,7 @@ require_once "php_update_user.php";
         <h4 class="modal-title">List Item </h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <?php require_once "insert_item.php"; ?>
+      <?php //require_once "insert_item.php"; ?>
       <!-- Modal body -->
       <div class="modal-body">
        
