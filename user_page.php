@@ -208,30 +208,55 @@ require_once "php_update_user.php";
             require_once "checkFK.php";
             ?>
         </div>
-        <div class="col py-3">
+        <div class="container text-center">
+                <div class="row">
+                <div class="col-12 col-sm-10">
+                    <div class="card">
+                             <div class="card-header">
+                                    Featured
+                            </div>
+                    <div class="card-body">
+                    <div class=" py-3">
              
-            <div class="container text-center">
-            <div class="row">
-            <div class="col">
-            <img src="<?php echo $_SESSION[
-                "image_url"
-            ]; ?>" class="img-rounded img-profile embed-responsive " id="profile" alt="profile image"> 
-            </div>
-            <div class="col">
-            Column
-            </div>
-            <div class="col">
-            Column
-            </div>
-            </div>
-            </div>
-         
-		 
+             <div class="container text-center">
+                <div class="row">
 
 
+                            
 
+                            <div class="col-4 col-sm-4 col-md-4">
+                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="img-rounded img-profile embed-responsive " id="profile" alt="profile image"> 
+                            </div>
 
+                            <div class="col">
+                            Column
+                            </div>
+                            
+                            <div class="col">
+                            Column
+                            </div>
+
+                            <div class="col">
+                            Column
+                            </div>
+
+                </div>
+                </div>
+                </div>
+             </div>
+          
+          
+ 
+ 
+ 
+ 
+         </div>
         </div>
+</div>
+
+
+
+         
         <!-- Div Main  End-->
     </div>
 </div>
