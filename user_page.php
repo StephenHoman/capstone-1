@@ -71,17 +71,26 @@ require_once "php_update_user.php";
                         <a href="#submenu1" data-bs-toggle="collapse" role="button" class="nav-link px-0 align-start">
                             <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Dashboard</span> </a>
                         <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+
+
                             <li class="w-100">
                                 <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Item</span> 1 </a>
                             </li>
                             <li>
                                 <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Item</span> 2 </a>
                             </li>
-                        </ul>
+                        </ul>                        
                     </li>
+                            
+                        <li class="w-100">
+       <!-- messageModal button --> <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline"><button type="button" class="styledBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#messageModal">Messages</button></span></a>
+                            </li>
+                        <li  class="w-100">
+
+
  
                     <li class="w-100">
-       <!-- userModal button --> <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline"><button type="button" class="styledBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemModal">List Item</button></span></a>
+       <!-- itemModal button --> <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline"><button type="button" class="styledBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemModal">List Item</button></span></a>
                             </li>
                     <li  class="w-100">
                         <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
@@ -349,6 +358,95 @@ require_once "php_update_user.php";
   </div>
 </div>
 <!-- user info update modal end --> 
+
+
+
+
+
+
+<!-- messagemodal start --> 
+<!-- The Modal -->
+<div class="modal" id="messageModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Messages</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <?php  ?>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="card" style="width: 100%; max-height: 500px;" > <?// this and the next line with overflow-auto are the parts that enable the page to be able to scroll?> 
+                <div class="card-body overflow-auto">
+      <div class="container "><?// container  ?> 
+                <div class="row"> <?// each row is for one message, this will be populated 
+                // with information from the database but for an example it is easy to see 
+                // how it will look here ?>
+                            <div class="col-2">
+                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+                            </div>
+
+                            <div class="col-8 " style="background-color: yellow;">
+                            Column
+                            </div>
+                            <div class="col-2 " style="background-color: pink;">
+                            Column
+                            </div>
+                </div>
+
+                <br></br>
+                <div class="row"> 
+                            <div class="col-2 " style="background-color: pink;">
+                            Column
+                            </div>
+                            
+                            <div class="col-8 " style="background-color: green;">
+                            Column
+                            </div>
+
+                            <div class="col-2">
+                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+                            </div>
+                </div>
+
+                
+
+
+       </div><?// container  ?> 
+        </div><?//end card ?>
+            </div><?//end card body ?>
+
+
+         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST" enctype="multipart/form-data">
+           <h3 class="mb-4"> <?php echo $_SESSION["username"]; ?> </h3>
+           
+           
+
+
+         </form>
+         
+            
+
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- message modal end --> 
+
+
+
+
+
+
 
 
 
