@@ -410,14 +410,69 @@ require_once "php_update_user.php";
                             <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
                             </div>
                 </div>
+                <br></br>
+                <div class="row"> 
+                            <div class="col-2 " style="background-color: pink;">
+                            Column
+                            </div>
+                            
+                            <div class="col-8 " style="background-color: green;">
+                            Column
+                            </div>
 
+                            <div class="col-2">
+                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+                            </div>
+                </div><br></br>
+                <div class="row"> 
+                            <div class="col-2 " style="background-color: pink;">
+                            Column
+                            </div>
+                            
+                            <div class="col-8 " style="background-color: green;">
+                            Column
+                            </div>
+
+                            <div class="col-2">
+                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+                            </div>
+                </div><br></br>
+                <div class="row"> 
+                            <div class="col-2 " style="background-color: pink;">
+                            Column
+                            </div>
+                            
+                            <div class="col-8 " style="background-color: green;">
+                            Column
+                            </div>
+
+                            <div class="col-2">
+                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+                            </div>
+                </div>
+
+                <br></br>
+                <div class="row"> 
+                            <div class="col-2 " style="background-color: pink;">
+                            Column
+                            </div>
+                            
+                            <div class="col-8 " style="background-color: green;">
+                            Column
+                            </div>
+
+                            <div class="col-2">
+                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+                            </div>
+                </div>
                 
 
 
        </div><?// container  ?> 
         </div><?//end card ?>
             </div><?//end card body ?>
-
+            <label for="comment">Comments:</label>
+<textarea class="form-control" rows="5" id="comment" name="text"></textarea> 
 
          <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST" enctype="multipart/form-data">
            <h3 class="mb-4"> <?php echo $_SESSION["username"]; ?> </h3>
