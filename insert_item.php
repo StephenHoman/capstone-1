@@ -89,7 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             $item_name =  trim($_POST['name']);
             $item_description =  trim($_POST['description']);
             $price =  trim($_POST['price']);
-            $category =  trim($_POST['category']);
+            $category_id = $_POST['category'];
             $tags =  trim($_POST['tags']);
             // $featured_item = $_REQUEST['featured'];
 
@@ -97,7 +97,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             $image_id = $_SESSION['item_image_id'];
             $user_id = trim($_POST['user_id']);
 
-            $category_id = 101;
             $tag_id = 104;
             $date_posted = date("Y-m-d");
             $premium_status = 1;
@@ -106,10 +105,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
             $sql = "insert into Items (item_name, item_description, category_id, tag_id, item_price, image_id, user_id,
                                         date_posted, premium_status, featured_item, sold)
-                                Values('$item_name', '$item_description', $category_id, $tag_id, $price,$image_id,
+                                Values('$item_name', '$item_description', $category_id, $tag_id, $price, $image_id,
                                        $user_id, '$date_posted', $premium_status, $featured_item, $sold)";
 
-
+echo $sql;
             if ($result = $conn->query($sql) == TRUE) {
         
                 $_SESSION['message'] = "item been created sucessfully!";

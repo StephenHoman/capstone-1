@@ -505,9 +505,11 @@ require_once "php_update_user.php";
 
 
 
-
-
-
+<!-- Get Category data for form drop down -->
+<?php
+    $sql = "SELECT category_id, category_name FROM mydatabase.category";
+    $all_categories = mysqli_query($conn,$sql);
+?>
 
 <!-- Item List modal start --> 
 <!-- The Modal -->
@@ -530,7 +532,7 @@ require_once "php_update_user.php";
 									<div class="card-header"> Create an Item </div>
 									<div class="card-body">
 
-                                        <!-- Start of form -->
+<!-- Start of form -->
 										<form action="insert_item.php" method="POST" enctype="multipart/form-data">
                                         <input type="hidden" name="user_id" value="<?php echo $_SESSION[
                                             "USERID"
@@ -561,9 +563,17 @@ require_once "php_update_user.php";
     <div class="mb-3">
         <label for="category" class="form-label">Item Category:*</label>
         <select name="category" class="form-select" required>
-            <option value="" disabled selected>Select a Category</option>
-            <option value="1">Tech</option>
-            <option value="2">Other</option>
+            <option value="default" selected disabled>Please select an item category</option>
+            <?php
+                while ($category = mysqli_fetch_array(
+                        $all_categories,MYSQLI_ASSOC)):;
+            ?>
+            <option value="<?php echo $category["category_id"]; ?>">
+                <?php echo $category["category_name"]; ?>
+            </option>
+            <?php
+                endwhile;
+            ?>
         </select>
     </div>
 
@@ -586,7 +596,6 @@ require_once "php_update_user.php";
 
     <div>
         <input type="submit" value="Create Item" class="btn btn-primary">
-        <input type="submit" value="Cancel" class="btn btn-secondary">
     </div>
 
                                         </form>
