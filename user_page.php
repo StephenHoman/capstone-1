@@ -11,6 +11,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 <?php
 require_once "dBCred.PHP";
 require_once "php_update_user.php";
+
+require_once('php_messaging.php');
+
 ?>
 
 <!doctype html>
@@ -217,7 +220,7 @@ require_once "php_update_user.php";
             require_once "checkFK.php";
             ?>
         </div>
-        <div class="container text-center">
+        <div class="container text-left">
                 <div class="row">
                 <div class="col-12 col-sm-10">
                     <div class="card">
@@ -227,7 +230,7 @@ require_once "php_update_user.php";
                     <div class="card-body">
                     <div class=" py-3">
              
-             <div class="container text-center">
+             <div class="container text-left">
                 <div class="row">
 
 
@@ -238,16 +241,36 @@ require_once "php_update_user.php";
                             </div>
 
                             <div class="col">
-                            Column
-                            </div>
-                            
-                            <div class="col">
-                            Column
-                            </div>
+                                <div class="row">
+                                    <div class="col"> 
+                                        <strong>User Name:</strong><?php echo " " . $_SESSION["username"]; ?>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Transaction Count:</strong> <?php echo $transaction_count; ?>
+                                    </div>
+                                </div>    
+                             <strong>User Description:</strong> <?php echo $user_description; ?> 
+                                <div class="row">
+                                    <div class="col"> 
+                                        <strong>Email:</strong> <?php echo $email; ?> 
+                                    </div>
+                                    <div class="col">
+                                        <strong>Location:</strong><?php echo $city . ', ' . $state; ?> 
+                                    </div>
+                                </div>
+                            <div class="row">
+                                <div class="col"> 
+                                    <strong>Account Creation Date:</strong> <?php echo $account_creation_date; ?>
+                                </div> 
+                                <div class="col">
+                                    <strong>Last Online:</strong> <?php echo $last_online; ?> 
+                                </div>
 
-                            <div class="col">
-                            Column
+                            <div>
+                             <strong>Transaction Count:</strong> <?php echo $transaction_count; ?> 
+                        
                             </div>
+                           
 
                 </div>
                 </div>
@@ -262,8 +285,96 @@ require_once "php_update_user.php";
          </div>
         </div>
 </div>
+<?php
+$user_id; // replace with the desired user ID
+$sql = "SELECT item_name, item_description, category_id, tag_id, item_price, image_id, user_id, date_posted, premium_status, featured_item, sold
+        FROM Items
+        WHERE user_id = ?";
+if ($stmt = mysqli_prepare($conn, $sql)) {
+    mysqli_stmt_bind_param($stmt, 'i', $user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    while ($row = mysqli_fetch_assoc($result)) {
+?>
+        <div class="container text-left">
+            <div class="row">
+          
+                 
+                 
+                    <div class="card">
+                        <div class="card-header">
+                            <?php echo $row['item_name']; ?>
+                        </div>
+                        <div class="card-body">
+                            <div class="py-3">
+                                <div class="row">
+                                <div class="col-4 col-sm-4 col-md-4">
+
+                                    <?php
+                                      $image_id = $row['image_id'];
+                                        $sql2 = "SELECT image_url FROM images WHERE image_id = ?";
+                                        if ($stmt2 = mysqli_prepare($conn, $sql2)) {
+                                            mysqli_stmt_bind_param($stmt2, 'i', $image_id);
+                                            mysqli_stmt_execute($stmt2);
+                                            $result2 = mysqli_stmt_get_result($stmt2);
+                                            if ($row2 = mysqli_fetch_assoc($result2)) {
+                                            $image_url = $row2['image_url'];
+                                            } else {
+                                            $image_url = "default_image_url.jpg"; // Replace with your default image URL
+                                            }
+                                            mysqli_stmt_close($stmt2);
+                                        } else {
+                                            $image_url = "default_image_url.jpg"; // Replace with your default image URL
+                                        }
+                                        ?>
+                                        <img src="<?php echo $image_url; ?>" class="img-rounded  img-item embed-responsive" alt="item image">
+                                         </div>
 
 
+                                    <div class="col-8">
+                                        <div class="row">
+                                            <div class="col">
+                                                <strong>Item Description:</strong> <?php echo $row['item_description']; ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <strong>Category ID:</strong> <?php echo $row['category_id']; ?>
+                                            </div>
+                                            <div class="col">
+                                                <strong>Tag ID:</strong> <?php echo $row['tag_id']; ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <strong>Item Price:</strong> <?php echo $row['item_price']; ?>
+                                            </div>
+                                            <div class="col">
+                                                <strong>Premium Status:</strong> <?php echo $row['premium_status']; ?>
+                                            </div>
+                                            <div class="col">
+                                                <strong>Featured Item:</strong> <?php echo $row['featured_item']; ?>
+                                            </div>
+                                            <div class="col">
+                                                <strong>Sold:</strong> <?php echo $row['sold']; ?>
+                                            </div>
+                                            </div>
+                                    </div>
+                                    </div>
+                            </div>
+                        
+                    </div>
+              
+            </div>
+    </div>
+        </div>
+<?php 
+    }
+    mysqli_stmt_close($stmt);
+}
+?>
+                    <p> print </p>
+             
 
          
         <!-- Div Main  End-->
@@ -381,90 +492,14 @@ require_once "php_update_user.php";
         <div class="card" style="width: 100%; max-height: 500px;" > <?// this and the next line with overflow-auto are the parts that enable the page to be able to scroll?> 
                 <div class="card-body overflow-auto">
       <div class="container "><?// container  ?> 
+                
                 <div class="row"> <?// each row is for one message, this will be populated 
                 // with information from the database but for an example it is easy to see 
                 // how it will look here ?>
-                            <div class="col-2">
-                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
-                            </div>
-
-                            <div class="col-8 " style="background-color: yellow;">
-                            Column
-                            </div>
-                            <div class="col-2 " style="background-color: pink;">
-                            Column
-                            </div>
-                </div>
-
-                <br></br>
-                <div class="row"> 
-                            <div class="col-2 " style="background-color: pink;">
-                            Column
-                            </div>
-                            
-                            <div class="col-8 " style="background-color: green;">
-                            Column
-                            </div>
-
-                            <div class="col-2">
-                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
-                            </div>
-                </div>
-                <br></br>
-                <div class="row"> 
-                            <div class="col-2 " style="background-color: pink;">
-                            Column
-                            </div>
-                            
-                            <div class="col-8 " style="background-color: green;">
-                            Column
-                            </div>
-
-                            <div class="col-2">
-                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
-                            </div>
-                </div><br></br>
-                <div class="row"> 
-                            <div class="col-2 " style="background-color: pink;">
-                            Column
-                            </div>
-                            
-                            <div class="col-8 " style="background-color: green;">
-                            Column
-                            </div>
-
-                            <div class="col-2">
-                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
-                            </div>
-                </div><br></br>
-                <div class="row"> 
-                            <div class="col-2 " style="background-color: pink;">
-                            Column
-                            </div>
-                            
-                            <div class="col-8 " style="background-color: green;">
-                            Column
-                            </div>
-
-                            <div class="col-2">
-                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
-                            </div>
-                </div>
-
-                <br></br>
-                <div class="row"> 
-                            <div class="col-2 " style="background-color: pink;">
-                            Column
-                            </div>
-                            
-                            <div class="col-8 " style="background-color: green;">
-                            Column
-                            </div>
-
-                            <div class="col-2">
-                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
-                            </div>
-                </div>
+                  
+                    
+                  <? runTest();?>
+                </div>  
                 
 
 

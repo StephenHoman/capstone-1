@@ -1,11 +1,17 @@
 .img-profile
-{
-     
+{ 
     width: 100%;
     min-width: 1%;
     flex-shrink: inherit;
 }
 /* <number> values */
+
+.img-item
+{ 
+    width: 100%;
+    min-width: 1%;
+    flex-shrink: inherit;
+}
 
 .menuBG
 {  

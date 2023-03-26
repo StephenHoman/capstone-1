@@ -1,5 +1,5 @@
 <?php
- require_once(DBCred);
+ require_once("dBCred.PHP");
 
 
 
