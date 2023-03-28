@@ -3,7 +3,7 @@
 require_once("dBCred.PHP");
 
 if (isset($_SESSION['LOGINID']) && isset($_SESSION['USERID'])){
-    echo $_SESSION['LOGINID'];
+   // echo $_SESSION['LOGINID'];
     $sql = "SELECT login_id FROM mydatabase.users_login WHERE user_id = ?";
          
     if ($stmt = mysqli_prepare($conn, $sql)) {
@@ -18,11 +18,11 @@ if (isset($_SESSION['LOGINID']) && isset($_SESSION['USERID'])){
             mysqli_stmt_store_result($stmt);
             // Check if username exists, if yes then verify password
             if (mysqli_stmt_num_rows($stmt) == 1) {                    
-                echo "found user";
+            //    echo "found user";
                 // Bind result variables
                 mysqli_stmt_bind_result($stmt, $login_id);
                 
-                echo "success";
+            //    echo "success";
             }
          else {
             echo "error1";
@@ -66,11 +66,11 @@ if (isset($_SESSION['USERID']) && isset($_SESSION['IMAGEID'])) {
             mysqli_stmt_store_result($stmt);
             // Check if username exists, if yes then verify password
             if (mysqli_stmt_num_rows($stmt) == 1) {                    
-                echo "found user";
+              //  echo "found user";
                 // Bind result variables
                 mysqli_stmt_bind_result($stmt, $login_id);
                              
-                echo "success";
+               // echo "success";
             }
          else {
             echo "error1";

@@ -40,10 +40,35 @@ require_once('php_messaging.php');
           });
         </script>
 
-    <title>Hello, world!</title>
+    <title>Dashboard</title>
   </head>
   <body>
-  
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <img src="photos/fillerlogo.jpg" class="  img-thumb   " id="profile" alt="profile image"> 
+               
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="search_page.php">Search For Items</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
   <?
   
   ?>
@@ -54,9 +79,7 @@ require_once('php_messaging.php');
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <img src="photos/fillerlogo.jpg" class="img-rounded img-profile embed-responsive " id="profile" alt="profile image"> 
-                </a>
+                 
                 <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">#<?php echo $_SESSION[
                         "id"
@@ -132,10 +155,10 @@ require_once('php_messaging.php');
 
             
         <div class="form-group mb-3">
-        <?php if (isset($_SESSION["username"])): ?>
+        <?php /*if (isset($_SESSION["username"])): ?>
              <?php echo $_SESSION["id"]; ?> 
              <?php echo $_SESSION["username"]; ?> 
-             <?php endif; ?>     
+             <?php endif;*/ ?>     
 
         </div>
         
@@ -171,7 +194,7 @@ require_once('php_messaging.php');
                             $premium
                         );
                         while (mysqli_stmt_fetch($stmt)) {
-                            printf(
+                           /* printf(
                                 " %d %s %s %d %d %s %s %s %s %d %d %d %d %d \n",
                                 $user_id,
                                 $user_description,
@@ -189,7 +212,7 @@ require_once('php_messaging.php');
                                 $transaction_count,
                                 $premium
                             );
-                            echo $email . "<br>";
+                            echo $email . "<br>";*/
                             $_SESSION["USERID"] = $user_id;
                             $_SESSION["LOGINID"] = $login_id;
                             $_SESSION["IMAGEID"] = $image_id;
@@ -211,7 +234,7 @@ require_once('php_messaging.php');
                         mysqli_stmt_bind_result($stmt, $image_url);
                         while (mysqli_stmt_fetch($stmt)) {
                             $_SESSION["image_url"] = $image_url;
-                            printf("%s \n", $image_url);
+                           // printf("%s \n", $image_url);
                         }
                     }
                     mysqli_stmt_close($stmt);
