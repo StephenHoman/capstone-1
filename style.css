@@ -48,3 +48,49 @@
     padding: 0.1rem 0 0 0;
     font-size: 0.875rem;
   }
+
+  .btn_yes {
+    display: block;
+    width: 100%;
+     
+    margin: 0 auto; /* Center the button horizontally */
+    padding: 12px 24px;
+    background-color: #007bff; /* Primary button color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .btn_yes:hover {
+    background-color: #0062cc; /* Darker hover color */
+  }
+  
+  .btn_yes:active {
+    background-color: #005cbf; /* Darker active color */
+  }
+  
+
+  .btn_no {
+    display: block;
+    width: 100%;
+    
+    margin: 0 auto; /* Center the button horizontally */
+    padding: 12px 24px;
+    background-color: #ccc; /* Gray button color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    }
+  
+  .btn_no:hover {
+    background-color: #999; /* Darker hover color */
+  }
+  
+  .btn_no:active {
+    background-color: #666; /* Darker active color */
+  }
+  

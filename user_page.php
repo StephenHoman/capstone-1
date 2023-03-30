@@ -25,6 +25,7 @@ require_once('php_messaging.php');
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">    <!-- Custom Style Sheet --> 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
     <!-- JS Scripts -->
     <script src="script.js"></script> 
@@ -86,16 +87,10 @@ require_once('php_messaging.php');
                     ]; ?> - <?php echo $_SESSION["username"]; ?> </span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline"><?php echo $_SESSION[
-                                "username"
-                            ]; ?></span>
-                        </a>
-                    </li>
+                     
                     <li>
                         <a href="#submenu1" data-bs-toggle="collapse" role="button" class="nav-link px-0 align-start">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Dashboard</span> </a>
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">Dashboard</span> </a>
                         <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
 
 
@@ -108,31 +103,48 @@ require_once('php_messaging.php');
                         </ul>                        
                     </li>
                             
-                        <li class="w-100">
-       <!-- messageModal button --> <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline"><button type="button" class="styledBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#messageModal">Messages</button></span></a>
-                            </li>
-                        <li  class="w-100">
-
-
- 
+                        <!-- messageModal button -->
                     <li class="w-100">
-       <!-- itemModal button --> <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline"><button type="button" class="styledBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemModal">List Item</button></span></a>
-                            </li>
-                     
-                    <li>
-                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-grid"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Settings</span> </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                            <li class="w-100">
-       <!-- userModal button --> <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline"><button type="button" class="styledBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Update Info</button></span></a>
-                            </li>
-                            
-                        </ul>
+                    <a href="#" class="nav-link px-0" data-bs-toggle="modal" data-bs-target="#messageModal">
+                        <i class="fs-4 bi bi-envelope"></i>
+                        <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">
+                        <button type="button" class="styledBtn btn btn-primary">Messages</button>
+                        </span>
+                    </a>
                     </li>
-                    <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1   d-sm-inline"><p class="text-muted"><a href="logout.php">Logout</a></p></span> </a>
+
+                    <!-- itemModal button -->
+                    <li class="w-100">
+                    <a href="#" class="nav-link px-0" data-bs-toggle="modal" data-bs-target="#itemModal">
+                        <i class="fs-4 bi bi-plus-circle"></i>
+                        <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">
+                        <button type="button" class="styledBtn btn btn-primary">List Item</button>
+                        </span>
+                    </a>
                     </li>
+
+                    <!-- userModal button -->
+                    <li class="w-100">
+                    <a href="#" class="nav-link px-0" data-bs-toggle="modal" data-bs-target="#userModal">
+                        <i class="fs-4 bi bi-gear"></i>
+                        <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">
+                        <button type="button" class="styledBtn btn btn-primary">Update Info</button>
+                        </span>
+                    </a>
+                    </li>
+
+                    <!-- logoutModal button -->  
+                    <li class="w-100">
+                    <a href="#" class="nav-link px-0" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <i class="fs-4 bi bi-box-arrow-right"></i>
+                                <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">
+                                <button type="button" class="styledBtn btn btn-primary">Log Out</button>
+                                </span>
+                        </a>
+                    </li>
+
+
+
                 </ul>
                 <hr>
                 
@@ -392,6 +404,38 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
         <!-- Div Main  End-->
     </div>
 </div>
+
+<!-- Logout Modal Start --> 
+<div class="modal" id="logoutModal"  tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Logout?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to logout?</p>
+      </div>
+      <div class="modal-footer">
+        <div class="container">
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary btn_yes" onclick="window.location.href='logout.php';">Yes</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary btn_no" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+        </div>
+         
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- Logout Modal End --> 
+
+
 
 <!-- user info update modal start --> 
 <!-- The Modal -->
@@ -667,6 +711,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
     
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>  </body>
