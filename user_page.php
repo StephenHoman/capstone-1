@@ -247,10 +247,10 @@ require_once('php_messaging.php');
         <div class="container text-left">
                 <div class="row">
                 <div class="col-12 col-sm-10">
-                    <div class="card">
-                             <div class="card-header">
-                                    Featured
-                            </div>
+                    <div class="card card_style">
+                            <!--  <div class="card-header"> --> 
+                            <!--  Featured  -->        
+                            <!--  </div>    -->
                     <div class="card-body">
                     <div class=" py-3">
              
@@ -259,41 +259,55 @@ require_once('php_messaging.php');
 
 
                             
-
-                            <div class="col-4 col-sm-4 col-md-4">
-                            <img src="<?php echo $_SESSION["image_url"]; ?>" class="img-rounded img-profile embed-responsive " id="profile" alt="profile image"> 
+                            <!-- User image, left of card -->
+                            <div class="col-4 col-sm-4 col-md-4 col-xs-5">
+                                <div class="container"><!--start container -->
+                                <div class="row text-center"><!--start row -->
+                                        
+                                        <div class="col-12">    
+                                        <img src="<?php echo $_SESSION["image_url"]; ?>" class="img-rounded rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+                                        </div>
+                                        
+                                        
+                                        
+                                    </div><!--end row -->
+                                </div><!--end container -->
                             </div>
-
+                            <!-- Left of User image card end -->
                             <div class="col">
                                 <div class="row">
-                                    <div class="col"> 
-                                        <strong>User Name:</strong><?php echo " " . $_SESSION["username"]; ?>
-                                    </div>
-                                    <div class="col">
-                                        <strong>Transaction Count:</strong> <?php echo $transaction_count; ?>
-                                    </div>
+                                            <div class="col-12 profile-card__name">    
+                                                <?php echo " " . $_SESSION["username"]; ?>
+                                            </div>
+                                            <div class="col-12 profile-card__name">    
+                                                <?php echo $user_description; ?> 
+                                            </div>
+                                     
                                 </div>    
-                             <strong>User Description:</strong> <?php echo $user_description; ?> 
+                              
                                 <div class="row">
                                     <div class="col"> 
                                         <strong>Email:</strong> <?php echo $email; ?> 
                                     </div>
                                     <div class="col">
-                                        <strong>Location:</strong><?php echo $city . ', ' . $state; ?> 
+                                    <i class="bi bi-geo-alt"></i><?php echo $city . ', ' . $state; ?> 
                                     </div>
                                 </div>
+
                             <div class="row">
-                                <div class="col"> 
-                                    <strong>Account Creation Date:</strong> <?php echo $account_creation_date; ?>
-                                </div> 
+ 
                                 <div class="col">
                                     <strong>Last Online:</strong> <?php echo $last_online; ?> 
                                 </div>
+                                <div class="col-12 ">    
+                                    <strong>Account Creation Date:</strong> <?php echo $account_creation_date; ?>
+                                </div>
+                                <div class="col-12  ">    
+                                    <strong>Transaction Count:</strong> <?php echo $transaction_count; ?>
+                                </div>
+                                
 
-                            <div>
-                             <strong>Transaction Count:</strong> <?php echo $transaction_count; ?> 
-                        
-                            </div>
+                            
                            
 
                 </div>
@@ -325,7 +339,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
           
                  
                  
-                    <div class="card">
+                    <div class="card item_card">
                         <div class="card-header">
                             <?php echo $row['item_name']; ?>
                         </div>

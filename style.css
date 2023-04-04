@@ -25,12 +25,31 @@
      
     background-color: rgb(243, 243, 243);
     padding: 5px;
-    margin-top: 25% !important;  
+    margin-top: 25%;
     border: solid rgba(0, 0, 0, .15);
     border-width: 1px 0;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);  
-} 
+}
+ 
+.card_style
+{
+  
+  background-color: rgb(243, 243, 243);
+  padding: 5px;
+  border: solid rgba(0, 0, 0, .15);
+  border-width: 1px 0;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);  
+}
 
+.item_card
+{
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  margin-top: 5px !important;  
+  border: solid rgba(0, 0, 0, .15);
+  border-width: 1px 0;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);  
+}
 .styledBtn
 {
     padding: 0 !important;
@@ -94,3 +113,9 @@
     background-color: #666; /* Darker active color */
   }
   
+  .profile-card__name {
+    font-weight: 700;
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 15px;
+  }
