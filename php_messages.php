@@ -1,10 +1,10 @@
 <?php
  require_once("dBCred.PHP");
- session_start();
+ 
 
  function getTheseMessages($sender_id, $reciever_id, $conn){
     // construct SQL query
-    $sql = "SELECT * FROM messages WHERE sender_id = $sender_id AND receiver_id = $receiver_id";
+    $sql = "SELECT * FROM messages WHERE sender_user_id = $sender_id AND receiver_user_id = $receiver_id";
     // get the first set of messages
     $result = mysqli_query($conn, $sql);
     $messages_recieved = array();
@@ -12,7 +12,7 @@
         $messages_recieved[] = $row;
     }
     //then the 2nd
-    $sql = "SELECT * FROM messages WHERE sender_id = $receiver_id AND receiver_id = $sender_id";
+    $sql = "SELECT * FROM messages WHERE sender_user_id = $receiver_id AND receiver_user_id = $sender_id";
     $result = mysqli_query($conn, $sql);
     $messages_sent = array();
     while ($row = mysqli_fetch_assoc($result)) {

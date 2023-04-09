@@ -104,14 +104,14 @@ require_once('php_messages.php');
                     </li>
                             
                         <!-- messageModal button -->
-                    <li class="w-100">
+                        <li class="w-100">
                     <a href="#" class="nav-link px-0" data-bs-toggle="modal" data-bs-target="#messageModal">
                         <i class="fs-4 bi bi-envelope"></i>
                         <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">
                         <button type="button" class="styledBtn btn btn-primary">Messages</button>
                         </span>
                     </a>
-                    </li>
+                            </li>
 
                     <!-- itemModal button -->
                     <li class="w-100">
@@ -131,18 +131,18 @@ require_once('php_messages.php');
                         <button type="button" class="styledBtn btn btn-primary">Update Info</button>
                         </span>
                     </a>
-                    </li>
+                            </li>
 
                     <!-- logoutModal button -->  
-                    <li class="w-100">
+                            <li class="w-100">
                     <a href="#" class="nav-link px-0" data-bs-toggle="modal" data-bs-target="#logoutModal">
                             <i class="fs-4 bi bi-box-arrow-right"></i>
                                 <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">
                                 <button type="button" class="styledBtn btn btn-primary">Log Out</button>
                                 </span>
                         </a>
-                    </li>
-
+                            </li>
+                            
 
 
                 </ul>
@@ -263,11 +263,11 @@ require_once('php_messages.php');
                             <div class="col-4 col-sm-4 col-md-4 col-xs-5">
                                 <div class="container"><!--start container -->
                                 <div class="row text-center"><!--start row -->
-                                        
+
                                         <div class="col-12">    
                                         <img src="<?php echo $_SESSION["image_url"]; ?>" class="img-rounded rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
-                                        </div>
-                                        
+                            </div>
+
                                         
                                         
                                     </div><!--end row -->
@@ -281,24 +281,24 @@ require_once('php_messages.php');
                                             </div>
                                             <div class="col-12 profile-card__name">    
                                                 <?php echo $user_description; ?> 
-                                            </div>
-                                     
+                            </div>
+                            
                                 </div>    
                               
                                 <div class="row">
-                                    <div class="col"> 
+                            <div class="col">
                                         <strong>Email:</strong> <?php echo $email; ?> 
-                                    </div>
+                            </div>
                                     <div class="col">
                                     <i class="bi bi-geo-alt"></i><?php echo $city . ', ' . $state; ?> 
                                     </div>
                                 </div>
 
                             <div class="row">
- 
-                                <div class="col">
+
+                            <div class="col">
                                     <strong>Last Online:</strong> <?php echo $last_online; ?> 
-                                </div>
+                            </div>
                                 <div class="col-12 ">    
                                     <strong>Account Creation Date:</strong> <?php echo $account_creation_date; ?>
                                 </div>
@@ -400,7 +400,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                                     </div>
                                     </div>
                             </div>
-                        
+
                     </div>
               
             </div>
@@ -412,7 +412,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
 }
 ?>
                     <p> print </p>
-             
+
 
          
         <!-- Div Main  End-->
@@ -566,14 +566,14 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                 <div class="row"> <?// each row is for one message, this will be populated 
                 // with information from the database but for an example it is easy to see 
                 // how it will look here ?>
-                  
-                    
+                            
+
                   <?  
                    // message box 
                   
                   ?>
                   
-                </div>  
+                </div>
                 
 
 
@@ -581,7 +581,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
         </div><?//end card ?>
             </div><?//end card body ?>
             <label for="comment">Comments:</label>
-<textarea class="form-control" rows="5" id="comment" name="text"></textarea> 
+            <textarea class="form-control" rows="5" id="comment" name="text"></textarea> 
 
          <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST" enctype="multipart/form-data">
            <h3 class="mb-4"> <?php echo $_SESSION["username"]; ?> </h3>
@@ -641,7 +641,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
 									<div class="card-header"> Create an Item </div>
 									<div class="card-body">
 
-<!-- Start of form -->
+                                        <!-- Start of form -->
 										<form action="insert_item.php" method="POST" enctype="multipart/form-data">
                                         <input type="hidden" name="user_id" value="<?php echo $_SESSION[
                                             "USERID"
