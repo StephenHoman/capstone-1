@@ -12,7 +12,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 require_once "dBCred.PHP";
 require_once "php_update_user.php";
 
-require_once('php_messaging.php');
+require_once('php_messages.php');
 
 ?>
 
@@ -568,7 +568,11 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                 // how it will look here ?>
                   
                     
-                  <? runTest();?>
+                  <?  
+                   // message box 
+                  
+                  ?>
+                  
                 </div>  
                 
 
