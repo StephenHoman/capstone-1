@@ -119,3 +119,26 @@
     color: #000000;
     margin-bottom: 15px;
   }
+
+  .nav-itemUser a {
+    color: #333;
+    text-decoration: none;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-itemUser a:hover {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .nav-itemUser a:active {
+    background-color: #666;
+    color: #fff;
+  }
+  
+  .nav-itemUser a.active {
+    background-color: #666;
+    color: #fff;
+  }
+  

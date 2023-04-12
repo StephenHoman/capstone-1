@@ -7,13 +7,23 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: index.php");
     exit();
 }
+
+if (isset($_GET['search'])) {
+  // Save the search value in a session variable
+  $_SESSION['search'] = $_GET['search'];
+  
+  // Perform the search
+  // ...
+} else {
+  // The user didn't submit the form, so use the saved search value (if any)
+  $search = $_SESSION['search'] ?? '';
+}
 ?>
 <?php
 require_once "dBCred.PHP";
 require_once "php_update_user.php";
-
 require_once('php_messaging.php');
-
+$searchType = isset($_GET['searchType']) ? $_GET['searchType'] : 'items';
 ?>
 
 <!doctype html>
@@ -41,7 +51,7 @@ require_once('php_messaging.php');
           });
         </script>
 
-    <title>Dashboard</title>
+    <title>Search</title>
   </head>
   <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -63,10 +73,12 @@ require_once('php_messaging.php');
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+ 
+      <form class="d-flex" id="searchform" method="GET">
+            <input type="text" class="form-control me-2" name="search" placeholder="search here" value="<?php echo $_SESSION['search'] ?? ''; ?>">
+            <input type="hidden" name="searchType" value="<?php echo $searchType; ?>">
+            <button type="submit" name="save" class="btn btn-outline-success" >Submit</button>
+        </form>
     </div>
   </div>
 </nav>
@@ -92,10 +104,167 @@ require_once('php_messaging.php');
                 <hr>
                 
             </div>
+
+        
+
+
           </div>
 
+<!-- Search -->
+<?php
+$searchResults = array();
+$searchErr = '';
+$itemResultCount = 0;
+$userResultCount = 0;
+if(isset($_GET['save']) || isset($_GET['searchType'])) {
+    if(!empty($_GET['search'])){
+        $searchTerm = "%".$_GET['search']."%";
+
+        $sqlItem = "select i.item_name, i.item_description, i.date_posted, t.tag_name from items i left join item_tags it on it.item_id = i.item_id left join tags t on t.tag_id = it.tag_id where i.item_name like ? or i.item_description like ? or t.tag_name like ?";
+        if($stmtItem = mysqli_prepare($conn, $sqlItem)){
+            mysqli_stmt_bind_param($stmtItem, 'sss', $search1, $search2, $search3);
+            $search1 = $searchTerm;
+            $search2 = $searchTerm;
+            $search3 = $searchTerm;
+            mysqli_stmt_execute($stmtItem);
+            mysqli_stmt_bind_result($stmtItem, $item_name, $item_description, $date_posted, $tag_name);
+            mysqli_stmt_store_result($stmtItem);
+                $itemResultCount = mysqli_stmt_num_rows($stmtItem);
+            while (mysqli_stmt_fetch($stmtItem)) {
+                $searchResults[] = array(
+                    "type" => "item",
+                    "name" => $item_name,
+                    "description" => $item_description,
+                    "date" => $date_posted,
+                    "tag" => $tag_name
+                );
+            }
+        }
+
+        $sqlUser = "SELECT user_username FROM login WHERE user_username LIKE ?";
+        if($stmtUser = mysqli_prepare($conn, $sqlUser)){
+            mysqli_stmt_bind_param($stmtUser, 's', $searchUser);
+            $searchUser = $searchTerm;
+            mysqli_stmt_execute($stmtUser);
+            mysqli_stmt_bind_result($stmtUser, $user_username);
+            while (mysqli_stmt_fetch($stmtUser)) {
+                $searchResults[] = array(
+                    "type" => "user",
+                    "name" => $user_username
+                );
+            }
+            $userResultCount = count($searchResults) - $itemResultCount;
+        }
+    }
+}
+?>
+<div class="col py-3">
+ 
+
+<script>
+  const itemsLink = document.getElementById('items-link');
+  const usersLink = document.getElementById('users-link');
+
+  itemsLink.addEventListener('click', () => {
+    itemsLink.classList.add('active');
+    usersLink.classList.remove('active');
+  });
+
+  usersLink.addEventListener('click', () => {
+    usersLink.classList.add('active');
+    itemsLink.classList.remove('active');
+  });
+
+  var searchResults = <?php echo json_encode($searchResults); ?>;
+  
 
 
+</script>
+ 
+
+ 
+
+<div class="nav justify-content-left">
+  <ul class="nav justify-content-left">
+    <li class="nav-itemUser">
+      <a id="items-link" class="nav-linkUser<?php if ($searchType === 'items') echo ' active'; ?>" href="?searchType=items<?php if (isset($_GET['search'])) echo '&search=' . $_GET['search']; ?>">Items</a>
+    </li>
+    <li class="nav-itemUser">
+      <a id="users-link" class="nav-linkUser<?php if ($searchType === 'users') echo ' active'; ?>" href="?searchType=users<?php if (isset($_GET['search'])) echo '&search=' . $_GET['search']; ?>">Users</a>
+    </li>
+  </ul>
+</div>
+
+
+<?php if ($searchType === 'items') { ?>
+  <div>
+    <table id="itemTable" width=100% >
+      <tr>
+        <td width=75%>Item Search Results: <?php echo $itemResultCount; ?></td>
+        <td width=25%>User Search Results: <?php echo $userResultCount; ?></td>
+      </tr>
+      <tr>
+        <td width=75%>
+          <table>
+            <thead>
+              <tr>
+                <th>Item Name</th>
+                <th>Item Description</th>
+                <th>Date Posted</th>
+                <th>Tags</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($searchResults as $result) {
+            if ($result["type"] === "item") { ?>
+                <tr>
+                    <td><?php echo $result["name"]; ?></td>
+                    <td><?php echo $result["description"]; ?></td>
+                    <td><?php echo $result["date"]; ?></td>
+                    <td><?php echo $result["tag"]; ?></td>
+                </tr>  
+            <?php }
+        } ?>
+            </tbody>
+          </table>
+        </td>
+         
+      </tr>
+    </table>
+  </div>
+<?php } if($searchType === 'users') { ?>
+  <div>
+    <table id="userTable"  width=100%>
+      <tr>
+         
+        <td width=25%>User Search Results: <?php echo $userResultCount; ?></td>
+      </tr>
+      <tr>
+        <td width=75%>
+          <table>
+            <thead>
+              <tr>
+                <th>User Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($searchResults as $result) {
+            if ($result["type"] === "user") { ?>
+                <tr>
+                    <td><?php echo $result["name"]; ?></td>
+                </tr>
+              
+            <?php }
+        } ?>
+            </tbody>
+          </table>
+        </td>
+        <td width=25%></td>
+      </tr>
+    </table>
+  </div>
+<?php } ?>
+  </div><!-- Div Main End -->
 
 
 
