@@ -7,11 +7,20 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: index.php");
     exit();
 }
+// Get the current URL query parameters
+$queryParams = $_GET;
 
+// Check if the required parameters are present
+if (isset($queryParams['search']) && isset($queryParams['searchType']) && isset($queryParams['save'])) {
+    // Set the boolean value to true
+    $booleanValue = true;
+} else {
+    // Set the boolean value to false
+    $booleanValue = false;
+}
 if (isset($_GET['search'])) {
   // Save the search value in a session variable
   $_SESSION['search'] = $_GET['search'];
-  
   // Perform the search
   // ...
 } else {
@@ -141,19 +150,23 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
             }
         }
 
-        $sqlUser = "SELECT user_username FROM login WHERE user_username LIKE ?";
+        $sqlUser = "SELECT user_username, login_id FROM login WHERE user_username LIKE ?";
         if($stmtUser = mysqli_prepare($conn, $sqlUser)){
             mysqli_stmt_bind_param($stmtUser, 's', $searchUser);
             $searchUser = $searchTerm;
             mysqli_stmt_execute($stmtUser);
-            mysqli_stmt_bind_result($stmtUser, $user_username);
+            mysqli_stmt_bind_result($stmtUser, $user_username, $user_loginID);
             while (mysqli_stmt_fetch($stmtUser)) {
                 $searchResults[] = array(
                     "type" => "user",
-                    "name" => $user_username
+                    "name" => $user_username,
+                    "id"  => $user_loginID
+                    
                 );
             }
             $userResultCount = count($searchResults) - $itemResultCount;
+            
+
         }
     }
 }
@@ -183,8 +196,9 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
  
 
  
-
-<div class="nav justify-content-left">
+<?php if ((($searchType === 'items' || $searchType === 'users') && (isset($_GET['search']) && $_GET['search'] !== '') && isset($queryParams['search']) && isset($queryParams['searchType']) )) { ?>
+  
+  <div class="nav justify-content-left">
   <ul class="nav justify-content-left">
     <li class="nav-itemUser">
       <a id="items-link" class="nav-linkUser<?php if ($searchType === 'items') echo ' active'; ?>" href="?searchType=items<?php if (isset($_GET['search'])) echo '&search=' . $_GET['search']; ?>">Items</a>
@@ -194,76 +208,119 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
     </li>
   </ul>
 </div>
+<?php 
+} else 
+{?><div class="container"> 
+    <div class="row sprite">
+    <div class="col"></div>
+    <div class="col align-content-center text-center">
+      <img src="photos/Greg-magnifying glass.png" class="img-fluid img-cap" alt="Responsive image">
+      <h4> Use the search bar to find users or items for sale!</h4>
+    </div>
+    <div class="col"></div>
+  </div>
+  
+  <?php } ?>
+
+<?php if ($searchType === 'items' && isset($_GET['search']) && ($_GET['search'] !== '') && isset($queryParams['search']) && isset($queryParams['searchType']) ) { ?>
+  <div>
+    <?
+  echo '<div class="spaced">';
+  echo  'User Search Results: '.$userResultCount ;
+  echo '</div>';
+ 
+  
+  ?>
+  <?php foreach ($searchResults as $result): ?>
+  <?php if ($result["type"] === "item"): ?>
+    <div class="container ">
+      <div class="card card_style">
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3">
+              <?php 
+               // add query for item image and username 
+                ?>
 
 
-<?php if ($searchType === 'items') { ?>
-  <div>
-    <table id="itemTable" width=100% >
-      <tr>
-        <td width=75%>Item Search Results: <?php echo $itemResultCount; ?></td>
-        <td width=25%>User Search Results: <?php echo $userResultCount; ?></td>
-      </tr>
-      <tr>
-        <td width=75%>
-          <table>
-            <thead>
-              <tr>
-                <th>Item Name</th>
-                <th>Item Description</th>
-                <th>Date Posted</th>
-                <th>Tags</th>
-              </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($searchResults as $result) {
-            if ($result["type"] === "item") { ?>
-                <tr>
-                    <td><?php echo $result["name"]; ?></td>
-                    <td><?php echo $result["description"]; ?></td>
-                    <td><?php echo $result["date"]; ?></td>
-                    <td><?php echo $result["tag"]; ?></td>
-                </tr>  
-            <?php }
-        } ?>
-            </tbody>
-          </table>
-        </td>
-         
-      </tr>
-    </table>
+              </div>
+              <div class="col  text-center-vert">
+                <div class="row">
+                  <div class="col-12"><h4><?php echo $result["name"]; ?></h4></div>
+                </div>
+                <div class="row">
+                  <div class="col-12"><p><?php echo $result["description"]; ?></p></div>
+                </div>
+                <div class="row">
+                  <div class="col-12"><p>Date Posted: <?php echo $result["date"]; ?></p></div>
+                </div>
+                <div class="row">
+                  <div class="col-12"><p>Tag: <?php echo $result["tag"]; ?></p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
+<?php endforeach; ?>
+
   </div>
-<?php } if($searchType === 'users') { ?>
-  <div>
-    <table id="userTable"  width=100%>
-      <tr>
+  <?php
+}
+if ($searchType === 'users' && ($_GET['search'] !== '') && isset($queryParams['search']) && isset($queryParams['searchType'])) {
+  echo '<div class="spaced">';
+  echo  'User Search Results: '.$userResultCount ;
+  echo '</div>';
+
+  // Prepare a single select statement to retrieve image_url for all users in $searchResults
+  $user_ids = array_column(array_filter($searchResults, function($result) { return $result["type"] === "user"; }), "id");
+  $user_ids_placeholder = implode(",", array_fill(0, count($user_ids), "?"));
+  $stmt = mysqli_prepare($conn, "SELECT login_id, image_url FROM mydatabase.users JOIN mydatabase.images ON users.image_id = images.image_id WHERE login_id IN ($user_ids_placeholder)");
+  mysqli_stmt_bind_param($stmt, str_repeat("s", count($user_ids)), ...$user_ids);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_bind_result($stmt, $user_loginID, $image_url);
+  $user_images = [];
+  while (mysqli_stmt_fetch($stmt)) {
+    $user_images[$user_loginID] = $image_url;
+  }
+  mysqli_stmt_close($stmt);
+?>
+     
+    <?php foreach ($searchResults as $result): ?>
+      <?php if ($result["type"] === "user"): ?>
+        <div class="container ">
+  
+        <div class="card card_style">
          
-        <td width=25%>User Search Results: <?php echo $userResultCount; ?></td>
-      </tr>
-      <tr>
-        <td width=75%>
-          <table>
-            <thead>
-              <tr>
-                <th>User Name</th>
-              </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($searchResults as $result) {
-            if ($result["type"] === "user") { ?>
-                <tr>
-                    <td><?php echo $result["name"]; ?></td>
-                </tr>
-              
-            <?php }
-        } ?>
-            </tbody>
-          </table>
-        </td>
-        <td width=25%></td>
-      </tr>
-    </table>
-  </div>
-<?php } ?>
+        <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-3">
+              <?php if (isset($user_images[$result["id"]])): ?>
+                <img src="<?php echo $user_images[$result["id"]]; ?>"   alt="User Image" class="img-thumbnail">
+              <?php endif; ?>
+            </div>
+            <div class="col  text-center-vert">
+              <div class="row">
+                       
+                      <div class="col-12 "><h4  ><?php echo $result["name"]; ?></h4></div>
+                       
+              </div>
+               
+            </div>
+          </div>
+          </div>
+        </div>
+        </div>
+        </div>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  
+
+              <?php } ?>
   </div><!-- Div Main End -->
 
 

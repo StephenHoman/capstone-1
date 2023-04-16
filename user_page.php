@@ -226,7 +226,7 @@ require_once('php_messages.php');
                 $param_id = $image_id;
                 if (mysqli_stmt_execute($stmt)) {
                     // Store result
-                    mysqli_stmt_store_result($stmt); // Check if username exists, if yes then verify password
+                    mysqli_stmt_store_result($stmt);  
                     if (mysqli_stmt_num_rows($stmt) == 1) {
                         // Bind result variables
                         mysqli_stmt_bind_result($stmt, $image_url);
@@ -245,9 +245,6 @@ require_once('php_messages.php');
                 <div class="row">
                 <div class="col-12 col-sm-10">
                     <div class="card card_style">
-                            <!--  <div class="card-header"> --> 
-                            <!--  Featured  -->        
-                            <!--  </div>    -->
                     <div class="card-body">
                     <div class=" py-3">
              
@@ -302,11 +299,6 @@ require_once('php_messages.php');
                                 <div class="col-12  ">    
                                     <strong>Transaction Count:</strong> <?php echo $transaction_count; ?>
                                 </div>
-                                
-
-                            
-                           
-
                 </div>
                 </div>
                 </div>

@@ -5,7 +5,10 @@
     flex-shrink: inherit;
 }
 /* <number> values */
-
+.img-cap
+{
+  height:250px;
+}
 .img-item
 { 
     width: 100%;
@@ -19,7 +22,15 @@
     min-width: 1%;
     flex-shrink: inherit;
 }
-
+.spaced
+{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.sprite
+{
+  margin-top: 50px;
+}
 .menuBG
 {  
      
@@ -40,7 +51,10 @@
   border-width: 1px 0;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);  
 }
-
+.img-max
+{
+  max-width: 22px;
+}
 .item_card
 {
   background-color: rgb(255, 255, 255);
@@ -142,3 +156,8 @@
     color: #fff;
   }
   
+  .txt-center-vert
+  {
+    margin: auto;
+ 
+  }
