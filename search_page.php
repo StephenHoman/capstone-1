@@ -228,7 +228,22 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
   echo '<div class="spaced">';
   echo  'User Search Results: '.$userResultCount ;
   echo '</div>';
- 
+ // Prepare a single select statement to retrieve item image url and user username for all items in $searchResults
+$item_names = array_column(array_filter($searchResults, function($result) { return $result["type"] === "item"; }), "name");
+$item_names_placeholder = implode(",", array_fill(0, count($item_names), "?"));
+$stmt = mysqli_prepare($conn, "SELECT items.item_name, items.item_price, images.image_url, login.user_username FROM mydatabase.items 
+JOIN mydatabase.images ON items.image_id = images.image_id 
+JOIN mydatabase.users ON items.user_id = users.user_id 
+JOIN mydatabase.login ON users.login_id = login.login_id 
+WHERE items.item_name IN ($item_names_placeholder)");
+mysqli_stmt_bind_param($stmt, str_repeat("s", count($item_names)), ...$item_names);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_bind_result($stmt, $item_name, $item_price, $image_url, $user_username);
+$item_images = [];
+while (mysqli_stmt_fetch($stmt)) {
+  $item_images[$item_name] = array("image_url" => $image_url, "item_price" => $item_price, "user_username" => $user_username);
+}
+mysqli_stmt_close($stmt);
   
   ?>
   <?php foreach ($searchResults as $result): ?>
@@ -239,21 +254,23 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
           <div class="col-12">
             <div class="row">
               <div class="col-3">
-              <?php 
-               // add query for item image and username 
-                ?>
-
-
+              <?php if (isset($item_images[$result["name"]]["image_url"])): ?>
+              <img src="<?php echo $item_images[$result["name"]]["image_url"]; ?>" alt="Item Image" class="img-thumbnail">
+            <?php endif; ?>
               </div>
               <div class="col  text-center-vert">
                 <div class="row">
-                  <div class="col-12"><h4><?php echo $result["name"]; ?></h4></div>
+                  <div class="col-6 text-start"><h4><?php echo $result["name"]; ?></h4></div>
+                  <div class="col-6 text-end"><h4><?php echo $item_images[$result["name"]]["item_price"]; ?></h4></div>
                 </div>
                 <div class="row">
                   <div class="col-12"><p><?php echo $result["description"]; ?></p></div>
                 </div>
                 <div class="row">
                   <div class="col-12"><p>Date Posted: <?php echo $result["date"]; ?></p></div>
+                </div>
+                <div class="row">
+                  <div class="col-12"><p>Posted by: <?php echo $item_images[$result["name"]]["user_username"]; ?></p></div>
                 </div>
                 <div class="row">
                   <div class="col-12"><p>Tag: <?php echo $result["tag"]; ?></p></div>

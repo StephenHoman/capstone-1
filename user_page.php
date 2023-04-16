@@ -326,11 +326,20 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
         <div class="container text-left">
             <div class="row">
           
-                 
+                 <script>
+
+                    </script>
                  
                     <div class="card item_card">
                         <div class="card-header">
-                            <?php echo $row['item_name']; ?>
+                            <div class="container">
+                            <div class="row">
+                            <div class="col-4 text-start"><?php echo $row['item_name']; ?></div>
+                            <div class="col-4 text-center"> </div>
+                            <button type="button" class="btn-close text-end" aria-label="Close" id="<?php echo $row['item_name']; ?>" onclick="deleteItem(this.id)"></button>
+
+                            </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="py-3">
@@ -399,8 +408,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
     }
     mysqli_stmt_close($stmt);
 }
-?>
-                    <p> print </p>
+?> 
 
 
          
