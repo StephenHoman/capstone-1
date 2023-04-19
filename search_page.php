@@ -96,35 +96,32 @@ $searchType = isset($_GET['searchType']) ? $_GET['searchType'] : 'items';
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                 
                 <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">#<?php echo $_SESSION["id"]; ?> - <?php echo $_SESSION["username"]; ?> </span>
                 </a>
-
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     <li class="nav-item">
                         <a href="#" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline"><?php echo $_SESSION["username"]; ?></span>
                         </a>
                     </li>
-                   
-                        
                 </ul>
                 <hr>
-                
             </div>
-
-        
-
-
           </div>
 
 <!-- Search -->
 <?php
-$searchResults = array();
 $searchErr = '';
+ 
 $itemResultCount = 0;
 $userResultCount = 0;
+$searchResults = array();
+$searchResultsItems = array();
+$searchResultsUsers = array();
+$itemSuccess = false; // success token for item search
+$userSuccess = false; // success token for user search
+
 if(isset($_GET['save']) || isset($_GET['searchType'])) {
     if(!empty($_GET['search'])){
         $searchTerm = "%".$_GET['search']."%";
@@ -136,18 +133,27 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
             $search2 = $searchTerm;
             $search3 = $searchTerm;
             mysqli_stmt_execute($stmtItem);
-            mysqli_stmt_bind_result($stmtItem, $item_name, $item_description, $date_posted, $tag_name);
-            mysqli_stmt_store_result($stmtItem);
-                $itemResultCount = mysqli_stmt_num_rows($stmtItem);
-            while (mysqli_stmt_fetch($stmtItem)) {
-                $searchResults[] = array(
-                    "type" => "item",
-                    "name" => $item_name,
-                    "description" => $item_description,
-                    "date" => $date_posted,
-                    "tag" => $tag_name
-                );
+            if(mysqli_stmt_error($stmtItem)) {
+                $searchErr = "Error executing item search query: " . mysqli_stmt_error($stmtItem);
             }
+            else {
+                mysqli_stmt_bind_result($stmtItem, $item_name, $item_description, $date_posted, $tag_name);
+                mysqli_stmt_store_result($stmtItem);
+                $itemResultCount = mysqli_stmt_num_rows($stmtItem);
+                while (mysqli_stmt_fetch($stmtItem)) {
+                    $searchResults[] = array(
+                        "type" => "item",
+                        "name" => $item_name,
+                        "description" => $item_description,
+                        "date" => $date_posted,
+                        "tag" => $tag_name
+                    );
+                }
+                $itemSuccess = true;
+            }
+        }
+        else {
+            $searchErr = "Error preparing item search statement: " . mysqli_error($conn);
         }
 
         $sqlUser = "SELECT user_username, login_id FROM login WHERE user_username LIKE ?";
@@ -155,21 +161,59 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
             mysqli_stmt_bind_param($stmtUser, 's', $searchUser);
             $searchUser = $searchTerm;
             mysqli_stmt_execute($stmtUser);
-            mysqli_stmt_bind_result($stmtUser, $user_username, $user_loginID);
-            while (mysqli_stmt_fetch($stmtUser)) {
-                $searchResults[] = array(
-                    "type" => "user",
-                    "name" => $user_username,
-                    "id"  => $user_loginID
-                    
-                );
+            if(mysqli_stmt_error($stmtUser)) {
+                $searchErr = "Error executing user search query: " . mysqli_stmt_error($stmtUser);
             }
-            $userResultCount = count($searchResults) - $itemResultCount;
-            
+            else {
+                mysqli_stmt_bind_result($stmtUser, $user_username, $user_loginID);
+                while (mysqli_stmt_fetch($stmtUser)) {
+                    $searchResults[] = array(
+                        "type" => "user",
+                        "name" => $user_username,
+                        "id"  => $user_loginID
+                    );
+                }
+                $userSuccess = true;
+                $userResultCount = count($searchResults) - $itemResultCount;
+            }
+        }
+        else {
+            $searchErr = "Error preparing user search statement: " . mysqli_error($conn);
+        }
+            //// added this for pagination, tried to count off from all items 
+            // where types were different but couldnt get it to work 
+            $searchResultsItems = array();
+            $searchResultsUsers = array();
 
+              foreach ($searchResults as $result) {
+                  if ($result['type'] == 'item') {
+                      $searchResultsItems[] = array(
+                          "type" => "item",
+                          "name" => $result['name'],
+                          "description" => $result['description'],
+                          "date" => $result['date'],
+                          "tag" => $result['tag']
+                      );
+                  } elseif ($result['type'] == 'user') {
+                      $searchResultsUsers[] = array(
+                          "type" => "user",
+                          "name" => $result['name'],
+                          "id" => $result['id']
+                      );
+                  }
+                  
+              }//// end of this loop
+                  if(count($searchResultsItems) <= 0)
+                  {
+                    $itemSuccess = false;
+                  }
+                  if(count($searchResultsUsers ) <= 0)
+                  {
+                    $userSuccess = false; 
+                  }
         }
     }
-}
+
 ?>
 <div class="col py-3">
  
@@ -222,12 +266,26 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
   
   <?php } ?>
 
-<?php if ($searchType === 'items' && isset($_GET['search']) && ($_GET['search'] !== '') && isset($queryParams['search']) && isset($queryParams['searchType']) ) { ?>
+<?php if ($searchType === 'items' && isset($_GET['search']) && ($_GET['search'] !== '') && isset($queryParams['search']) && isset($queryParams['searchType'])) { ?>
   <div>
-    <?
+    <? 
   echo '<div class="spaced">';
-  echo  'User Search Results: '.$userResultCount ;
+  echo  'User Search Results: '.$itemResultCount ;
   echo '</div>';
+  if( !$itemSuccess)
+  { ?>
+    <div class="container"> 
+    <div class="row sprite">
+    <div class="col"></div>
+    <div class="col align-content-center text-center">
+      <img src="photos/Greg-magnifying glass.png" class="img-fluid img-cap" alt="Responsive image">
+      <h4> No Items Found!</h4>
+    </div>
+    <div class="col"></div>
+  </div>
+  <?php
+  }
+  if($itemSuccess){
  // Prepare a single select statement to retrieve item image url and user username for all items in $searchResults
 $item_names = array_column(array_filter($searchResults, function($result) { return $result["type"] === "item"; }), "name");
 $item_names_placeholder = implode(",", array_fill(0, count($item_names), "?"));
@@ -245,9 +303,24 @@ while (mysqli_stmt_fetch($stmt)) {
 }
 mysqli_stmt_close($stmt);
   
-  ?>
-  <?php foreach ($searchResults as $result): ?>
-  <?php if ($result["type"] === "item"): ?>
+  ?><?php
+  // Define the number of items to display per page
+  $itemsPerPage = 10;
+
+  // Define the current page number based on the user's request or any default value
+  $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+  // Define the searchType and search parameters
+  $searchType = isset($_GET['searchType']) ? htmlspecialchars($_GET['searchType']) : '';
+  $search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
+
+  // Extract a portion of the $searchResults array based on the current page number and the number of items to display per page
+  $startIndex = ($currentPage - 1) * $itemsPerPage;
+  $pagedResults = array_slice($searchResultsItems, $startIndex, $itemsPerPage);
+
+  // Loop through the extracted portion of the array and generate the HTML for each item
+  foreach ($pagedResults as $result):
+   if ($result["type"] === "item"): ?>
     <div class="container ">
       <div class="card card_style">
         <div class="row">
@@ -270,7 +343,9 @@ mysqli_stmt_close($stmt);
                   <div class="col-12"><p>Date Posted: <?php echo $result["date"]; ?></p></div>
                 </div>
                 <div class="row">
-                  <div class="col-12"><p>Posted by: <?php echo $item_images[$result["name"]]["user_username"]; ?></p></div>
+                  <div class="col-12">
+                  <p>Posted by: <a href="public_user.php?username=<?php echo $item_images[$result["name"]]["user_username"]; ?>"><?php echo $item_images[$result["name"]]["user_username"]; ?></a></p>
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-12"><p>Tag: <?php echo $result["tag"]; ?></p></div>
@@ -282,16 +357,62 @@ mysqli_stmt_close($stmt);
       </div>
     </div>
   <?php endif; ?>
-<?php endforeach; ?>
+<?php endforeach;  
 
+
+  // Calculate the total number of pages based on the number of items and the items per page, and round up to the nearest integer
+  $totalPages = ceil(count($searchResultsItems) / $itemsPerPage);
+
+  // If the current page is greater than the total number of pages, redirect to the last page
+  if ($currentPage > $totalPages && $totalPages > 0) {
+    header('Location: ?page=' . $totalPages . (!empty($searchType) ? '&searchType=' . urlencode($searchType) : '') . (!empty($search) ? '&search=' . urlencode($search) : ''));
+    exit;
+  }
+
+  // Add pagination links or buttons with retained parameters
+  if ($totalPages > 1) {
+    echo '<ul class="pagination">';
+    for ($i = 1; $i <= $totalPages; $i++) {
+      $activeClass = $i === $currentPage ? 'active' : '';
+      $url = '?page=' . $i;
+      if (!empty($searchType)) {
+        $url .= '&searchType=' . urlencode($searchType);
+      }
+      if (!empty($search)) {
+        $url .= '&search=' . urlencode($search);
+      }
+      echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="' . $url . '">' . $i . '</a></li>';
+    }
+    echo '</ul>';
+  }
+?>
   </div>
   <?php
-}
+} }
+
+ 
+
+
+
+
 if ($searchType === 'users' && ($_GET['search'] !== '') && isset($queryParams['search']) && isset($queryParams['searchType'])) {
   echo '<div class="spaced">';
   echo  'User Search Results: '.$userResultCount ;
   echo '</div>';
-
+  if( !$itemSuccess)
+  { ?>
+    <div class="container"> 
+    <div class="row sprite">
+    <div class="col"></div>
+    <div class="col align-content-center text-center">
+      <img src="photos/Greg-magnifying glass.png" class="img-fluid img-cap" alt="Responsive image">
+      <h4> No Users Found!</h4>
+    </div>
+    <div class="col"></div>
+  </div>
+  <?php
+  }
+  if($itemSuccess){
   // Prepare a single select statement to retrieve image_url for all users in $searchResults
   $user_ids = array_column(array_filter($searchResults, function($result) { return $result["type"] === "user"; }), "id");
   $user_ids_placeholder = implode(",", array_fill(0, count($user_ids), "?"));
@@ -305,36 +426,76 @@ if ($searchType === 'users' && ($_GET['search'] !== '') && isset($queryParams['s
   }
   mysqli_stmt_close($stmt);
 ?>
-     
-    <?php foreach ($searchResults as $result): ?>
-      <?php if ($result["type"] === "user"): ?>
+   <?php
+  // Define the number of items to display per page
+  $itemsPerPage = 10;
+
+  // Define the current page number based on the user's request or any default value
+  $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+  // Define the searchType and search parameters
+  $searchType = isset($_GET['searchType']) ? htmlspecialchars($_GET['searchType']) : '';
+  $search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
+
+  // Extract a portion of the $searchResults array based on the current page number and the number of items to display per page
+$startIndex = ($currentPage - 1) * $itemsPerPage;
+$pagedResults = array_slice($searchResultsUsers, $startIndex, $itemsPerPage);
+
+// Loop through the extracted portion of the array and generate the HTML for each item
+  foreach ($pagedResults as $result):
+      if ($result["type"] === "user"): ?>
         <div class="container ">
-  
-        <div class="card card_style">
-         
-        <div class="row">
-        <div class="col-12">
-          <div class="row">
-            <div class="col-3">
-              <?php if (isset($user_images[$result["id"]])): ?>
-                <img src="<?php echo $user_images[$result["id"]]; ?>"   alt="User Image" class="img-thumbnail">
-              <?php endif; ?>
-            </div>
-            <div class="col  text-center-vert">
-              <div class="row">
-                       
-                      <div class="col-12 "><h4  ><?php echo $result["name"]; ?></h4></div>
-                       
+          <div class="card card_style">
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-3">
+                    <?php if (isset($user_images[$result["id"]])): ?>
+                      <img src="<?php echo $user_images[$result["id"]]; ?>" alt="User Image" class="img-thumbnail">
+                    <?php endif; ?>
+                  </div>
+                  <div class="col text-center-vert">
+                    <div class="row">
+                      <div class="col-12">
+                        <h4><?php echo $result["name"]; ?></h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-               
             </div>
           </div>
-          </div>
-        </div>
-        </div>
         </div>
       <?php endif; ?>
-    <?php endforeach; ?>
+    <?php endforeach;
+
+ 
+  // Calculate the total number of pages based on the number of items and the items per page, and round up to the nearest integer
+  $totalPages = ceil(count($searchResultsUsers) / $itemsPerPage);
+
+  // If the current page is greater than the total number of pages, redirect to the last page
+  if ($currentPage > $totalPages && $totalPages > 0) {
+    header('Location: ?page=' . $totalPages . (!empty($searchType) ? '&searchType=' . urlencode($searchType) : '') . (!empty($search) ? '&search=' . urlencode($search) : ''));
+    exit;
+  }
+
+  // Add pagination links or buttons with retained parameters
+  if ($totalPages > 1) {
+    echo '<ul class="pagination">';
+    for ($i = 1; $i <= $totalPages; $i++) {
+      $activeClass = $i === $currentPage ? 'active' : '';
+      $url = '?page=' . $i;
+      if (!empty($searchType)) {
+        $url .= '&searchType=' . urlencode($searchType);
+      }
+      if (!empty($search)) {
+        $url .= '&search=' . urlencode($search);
+      }
+      echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="' . $url . '">' . $i . '</a></li>';
+    }
+    echo '</ul>';
+  }}
+?>
   
 
               <?php } ?>
