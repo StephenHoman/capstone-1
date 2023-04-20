@@ -34,7 +34,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                 mysqli_stmt_store_result($stmt);
                 
                 if(mysqli_stmt_num_rows($stmt) == 1)
-                {
+                {   
+                    $_SESSION['signup_error'] = true;
                     $username_err = "This user is already taken.";
                 }
                     else
@@ -45,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                 else
             {
             
-
+                $_SESSION['signup_error'] = true;
                 echo "Oops! Something went wrong. Please try again later.";
             }
 
@@ -56,12 +57,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     
     // Validate password
     if(empty(trim($_POST["password"])))
-    {
+    {   
+        $_SESSION['signup_error'] = true;
         $password_err = "Please enter a password.";     
         }
             elseif
             (strlen(trim($_POST["password"])) < 6)
         {
+            $_SESSION['signup_error'] = true;
         $password_err = "Password must have atleast 6 characters.";
     }
         else
@@ -79,6 +82,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         $confirm_password = trim($_POST["confirm_password"]);
         if(empty($password_err) && ($password != $confirm_password))
         {
+            $_SESSION['signup_error'] = true;
             $confirm_password_err = "Password did not match.";
         }
     }
@@ -132,12 +136,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             } 
                 else
             {
+                $_SESSION['signup_error'] = true;
                 echo "Something went wrong. Please try again later.";
             }
             // Close statement
             mysqli_stmt_close($stmt);
+            $_SESSION['signup_error'] = true;
         }}
     }}}
     // Close connection
     mysqli_close($conn);
+    $_SESSION['signup_error'] = true;
 }

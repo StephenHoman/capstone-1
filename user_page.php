@@ -84,7 +84,7 @@ require_once('php_messages.php');
                     ]; ?> - <?php echo $_SESSION["username"]; ?> </span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                     
+                     <?php if(( 1 == 1) )  { ?>
                     <li>
                         <a href="#submenu1" data-bs-toggle="collapse" role="button" class="nav-link px-0 align-start">
                             <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">Dashboard</span> </a>
@@ -99,7 +99,7 @@ require_once('php_messages.php');
                             </li>
                         </ul>                        
                     </li>
-                            
+                        <?php }?>
                         <!-- messageModal button -->
                         <li class="w-100">
                     <a href="#" class="nav-link px-0" data-bs-toggle="modal" data-bs-target="#messageModal">
@@ -214,6 +214,7 @@ require_once('php_messages.php');
                             $_SESSION["USERID"] = $user_id;
                             $_SESSION["LOGINID"] = $login_id;
                             $_SESSION["IMAGEID"] = $image_id;
+                            $_SESSION["PREMIUM"] = $premium;
                         }
                         mysqli_stmt_close($stmt);
                     }
@@ -336,7 +337,7 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                             <div class="row">
                             <div class="col-4 text-start"><?php echo $row['item_name']; ?></div>
                             <div class="col-4 text-center"> </div>
-                            <button type="button" class="btn-close text-end" aria-label="Close" id="<?php echo $row['item_name']; ?>" onclick="deleteItem(this.id)"></button>
+                            <div class="col-4 text-end"><button type="button" class="btn-close  " aria-label="Close" id="<?php echo $row['item_name']; ?>" onclick="deleteItem(this.id)"></button></div>
 
                             </div>
                             </div>
@@ -356,11 +357,11 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                                             if ($row2 = mysqli_fetch_assoc($result2)) {
                                             $image_url = $row2['image_url'];
                                             } else {
-                                            $image_url = "default_image_url.jpg"; // Replace with your default image URL
+                                            $image_url = "photos/profile_image/default.webp"; // Replace with your default image URL
                                             }
                                             mysqli_stmt_close($stmt2);
                                         } else {
-                                            $image_url = "default_image_url.jpg"; // Replace with your default image URL
+                                            $image_url = "photos/profile_image/default.webp"; // Replace with your default image URL
                                         }
                                         ?>
                                         <img src="<?php echo $image_url; ?>" class="img-rounded  img-item embed-responsive" alt="item image">

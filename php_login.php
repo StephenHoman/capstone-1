@@ -10,6 +10,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     if(empty(trim($_POST["username"])))
     {
         $username_err = "Please enter username.";
+        $_SESSION['login_error'] = true;
     }
         else
     {
@@ -19,6 +20,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     if(empty(trim($_POST["password"])))
     {
         $password_err = "Please enter your password.";
+        $_SESSION['login_error'] = true;
     }
         else
     {
@@ -27,26 +29,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     // Validate credentials
     if(empty($username_err) && empty($password_err))
     {
-        echo "preparing statement";
+        //echo "preparing statement";
         // Prepare a select statement
         $sql = "SELECT login_id, user_username, user_password FROM mydatabase.login WHERE user_username = ?";
         if($stmt = mysqli_prepare($conn, $sql))
         {
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
-            echo "statement bound";
+           // echo "statement bound";
             // Set parameters
             $param_username = $username;
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt))
             { 
-                echo "storing result";
+               // echo "storing result";
                 // Store result
                 mysqli_stmt_store_result($stmt);
                 // Check if username exists, if yes then verify password
                 if(mysqli_stmt_num_rows($stmt) == 1)
                 {                    
-                    echo "found user";
+                    //echo "found user";
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $login_id, $username, $hashed_password);
                     if(mysqli_stmt_fetch($stmt))
@@ -66,6 +68,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                         }
                         else
                         {
+                            $_SESSION['login_error'] = true;
                             // Display an error message if password is not valid
                             $password_err = "The password you entered was not valid.";
                         }
@@ -73,20 +76,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
                 }
                 else
                 {
+                    $_SESSION['login_error'] = true;
                     // Display an error message if username doesn't exist
                     $username_err = "No account found with that username.";
                 }
             }
             else
             {
-                echo "Oops! Something went wrong. Please try again later.";
+                $_SESSION['login_error'] = true;
+               // echo "Oops! Something went wrong. Please try again later.";
             }
-            echo " 1st close";
+            
             // Close statement
             mysqli_stmt_close($stmt);
         }
     }
-    echo "2nd close";
+   
     // Close connection
     mysqli_close($conn);
 }

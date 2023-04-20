@@ -50,9 +50,10 @@
 
             
            <div class="mb-3 row">
-                <label for="staticEmail" class="col-sm-5 col-form-label">Email</label>
+           <label for="staticEmail" class="col-sm-5 col-form-label"  >Email<span class="required">*</span></label>
             <div class="col-sm-7">
-                <input type="text"  class="form-control" id="email" name="email" >
+
+                <input type="text"  class="form-control" id="email" name="email" placeholder="required" required>
             </div>
             </div>
             

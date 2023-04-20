@@ -10,6 +10,10 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 }
 ?>
  <?php
+    // Check for errors and set session variable
+    $_SESSION['login_error'];
+ 
+ 
     require_once("dBCred.PHP");
     require_once("php_login.php");
   ?>
@@ -32,6 +36,8 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
     <title>Log in</title>
   </head>
+
+  
   <div class="container text-center   ">
   <div class="row ">
 
@@ -42,7 +48,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     
 
     <div class="card menuBG"  >
-   
+    
     <div id="carouselLogin" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
@@ -56,7 +62,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     </div>
   </div>
 </div>
-
+ 
 
 
 
@@ -76,15 +82,16 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
      
      </div><!-- end row --> 
    </div> <!-- end container -->
- 
+
  <!-- The Modal -->
- <div class="modal fade" id="myModal">
+ <div class="modal fade <?php echo $_SESSION['login_error'] ? 'show' : ''; ?>" style="<?php echo $_SESSION['login_error'] ? 'display:block;' : ''; ?>" id="myModal">
    <div class="modal-dialog">
      <div class="modal-content">
        <!-- Modal Header -->
        <div class="modal-header">
          <h4 class="modal-title">Existing user</h4>
-         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeModal()"></button>
+ 
        </div>
        <!-- Modal body -->
        <div class="modal-body">
@@ -114,13 +121,27 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
        </div>
        <!-- Modal footer -->
        <div class="modal-footer">
-         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+       <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+
        </div>
      </div>
    </div>
  </div>
  <!-- Login Modal -->
  <!--  End       -->
+ <script>
+function closeModal() {
+  <?php 
+    // Set the login_error session variable to false
+    $_SESSION['login_error'] = false;
+  ?>
+  // Hide the modal
+  var modal = document.getElementById('myModal');
+  modal.style.display = 'none';
+  modal.classList.remove('show');
+}
+
+</script>
 
  
     

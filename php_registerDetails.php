@@ -6,21 +6,60 @@ $user_description = $zip_code = $city = $state = $address_line_two = $address_li
 
 function uploadProfileImage($photoInput, $conn)  {
     $uploadDir = 'photos/profile_image';
-    $tempName = $photoInput['tmp_name'];
-    $fileName = basename($photoInput['name']);
-    $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-    $hashedName = hash('sha256', time() . $fileName) . '.' . $fileType;
-    $targetFile = $uploadDir . '/' . $hashedName;
-    $directory =  $targetFile;
-    $_SESSION['image_url'] = $targetFile;
-    require_once("dBCred.PHP");
-
-    // Move uploaded file to new location with new name
-    if(move_uploaded_file($tempName, $targetFile)){
-        // Prepare an insert statement
+    $defaultImagePath = 'photos/profile_image/default.webp';
+    
+    // Check if user uploaded an image
+    if ($photoInput['error'] == UPLOAD_ERR_OK) {
+        $tempName = $photoInput['tmp_name'];
+        $fileName = basename($photoInput['name']);
+        $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $hashedName = hash('sha256', time() . $fileName) . '.' . $fileType;
+        $targetFile = $uploadDir . '/' . $hashedName;
+        $directory =  $targetFile;
+        
+        // Move uploaded file to new location with new name
+        if(move_uploaded_file($tempName, $targetFile)){
+            // Prepare an insert statement
      
+            $sql = "INSERT INTO mydatabase.images (image_id, image_url) VALUES (NULL, ?)";
+     
+            if($stmt = mysqli_prepare($conn, $sql)){
+                // Bind variables to the prepared statement as parameters
+                mysqli_stmt_bind_param($stmt, "s", $param_image_url);
+             
+                // Set parameters
+                $param_image_url = $directory;
+            }
+            else{
+                echo "failed at line 24";
+            }
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt))
+            { 
+                echo mysqli_error($conn);
+                return $directory;
+            }
+            else
+            {
+                echo mysqli_error($conn);
+                echo "image Failed- sql error";
+            }
+        }
+        return $defaultImagePath;
+    } else {
+        // Use default image and hash its path
+        $hashedName = hash('sha256', time() . $defaultImagePath) . '.webp';
+        $targetFile = $uploadDir . '/' . $hashedName;
+        $directory = $targetFile;
+        
+        if (!copy($defaultImagePath, $targetFile)) {
+            echo "Failed to copy default image";
+            return false;
+        }
+        
+        // Insert default image path into database
         $sql = "INSERT INTO mydatabase.images (image_id, image_url) VALUES (NULL, ?)";
-     
         if($stmt = mysqli_prepare($conn, $sql)){
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_image_url);
@@ -31,25 +70,27 @@ function uploadProfileImage($photoInput, $conn)  {
         else{
             echo "failed at line 24";
         }
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt))
-            { echo mysqli_error($conn);
-                return $directory;
-            }
-            else
-            {echo mysqli_error($conn);
-                echo "image Failed- sql error";
-            }
+            
+        // Attempt to execute the prepared statement
+        if(mysqli_stmt_execute($stmt))
+        { 
+            echo mysqli_error($conn);
+            return $directory;
         }
-     
-        return 'photos/profile_image/default.webp';
-    
+        else
+        {
+            echo mysqli_error($conn);
+            echo "image Failed- sql error";
+        }
+        
+        return $directory;
+    }
 }
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST")
 { 
      
-        if (isset($_FILES['formFile']) && $_FILES['formFile']['error'] == UPLOAD_ERR_OK) {
+        if (isset($_POST['email'])) {
             // File was uploaded successfully
             require_once("dBCred.PHP");
             $newFileName = uploadProfileImage($_FILES['formFile'], $conn);
@@ -92,9 +133,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
 
 
-        if(empty($username_err) && empty($password_err) && empty($confirm_password_err))
+        if(empty($username_err) && empty($password_err) && empty($confirm_password_err) )
         {   
-            $email            = trim($_POST["email"]);
+            $email = isset($_POST["email"]) ? trim($_POST["email"]) : '';
+
             $login_id         = trim($_POST["login_id"]);
             $image_id         = $_SESSION['image_id'];
             

@@ -69,13 +69,14 @@
    </div> <!-- end container -->
  
  
-    <!-- The Modal --><div class="modal fade" id="myModal2">
+    <!-- The Modal -->
+    <div class="modal fade <?php echo $_SESSION['signup_error'] ? 'show' : ''; ?>" style="<?php echo $_SESSION['signup_error'] ? 'display:block;' : ''; ?>" id="myModal2">
    <div class="modal-dialog">
      <div class="modal-content">
        <!-- Modal Header -->
        <div class="modal-header">
          <h4 class="modal-title">New User</h4>
-         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeModal()"></button>
        </div>
        <!-- Modal body -->
        <div class="modal-body">
@@ -107,14 +108,28 @@
        </div>
        <!-- Modal footer -->
        <div class="modal-footer">
-         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          
+         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+
        </div>
      </div>
    </div>
  </div>
 <!-- SignUp Modal -->
  <!--  End       --> 
+ <script>
+function closeModal() {
+  <?php 
+    // Set the signup_error session variable to false
+    $_SESSION['signup_error'] = false;
+  ?>
+  // Hide the modal
+  var modal = document.getElementById('myModal2');
+  modal.style.display = 'none';
+  modal.classList.remove('show');
+}
 
+</script>
 
       <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
