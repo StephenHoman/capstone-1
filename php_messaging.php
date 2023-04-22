@@ -1,59 +1,49 @@
 <?php
 
+//this needs something to get user images, and each piece might needs some work to be put together -NS
 
-function testConversation(){
-    //message_id | sender_user_id | receiver_user_id | message | date_time_sent 	
-    $conversation = array(
-        array(
-            "message_id" => 01,
-            "sender_user_id" => 19,
-            "receiver_user_id" => 22,
-            "message" => "can I buy this thing?",
-            "date_time_sent" => 22,
-        ),
-        array(
-            "message_id" => 02,
-            "sender_user_id" => 22,
-            "receiver_user_id" => 19,
-            "message" => "Yes, but it costs money!",
-            "date_time_sent" => 23,
-        ),
-        array(
-            "message_id" => 03,
-            "sender_user_id" => 19,
-            "receiver_user_id" => 22,
-            "message" => "How much money?",
-            "date_time_sent" => 24,
-        ),
-        array(
-            "message_id" => 04,
-            "sender_user_id" => 22,
-            "receiver_user_id" => 19,
-            "message" => "It costs 10 United States Dollars",
-            "date_time_sent" => 25,
-        ),
-        array(
-            "message_id" => 05,
-            "sender_user_id" => 19,
-            "receiver_user_id" => 22,
-            "message" => "Will you do 5 United States Dollars?",
-            "date_time_sent" => 26,
-        ),
-        array(
-            "message_id" => 06,
-            "sender_user_id" => 22,
-            "receiver_user_id" => 19,
-            "message" => "You drive a hard bargain! But yes, I will do 5 dollarz",
-            "date_time_sent" => 27,
-        )
-        );  
-        return $conversation; 
+
+
+
+function send_Message($user_id, $reciever_id, $message, $conn){
+    //sends a message from one user to another.
+    $sql = "INSERT INTO messages (sender_user_id, receiver_user_id, message, date_time_sent) VALUES
+    (". $user_id .",". $reciever_id . "," . $message . "," . date('Y-m-d H:i:s') . ");";
+    $result = mysqli_query($conn, $sql);
 }
 
-function createConversation($conversation, $user_id){
-    //this works, but it needs a way to pull user images from the database. I included dummy images from my computer for this part.
-    $user_img = 'CAT.jpg';
-    $other_img = 'QUEEN.jpg';
+
+
+
+
+function getMessages($user_id, $conn){
+
+    // SQL query to select messages for the user ID entered
+    $sql = "SELECT * FROM messages WHERE sender_user_id = $user_id OR receiver_user_id = $user_id";
+    // Execute SQL query
+    $result = mysqli_query($conn, $sql);
+    // Check if query was successful
+    if ($result) {
+        // Fetch all rows as an array
+        $messages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        // Free result set
+        mysqli_free_result($result);
+        mysqli_close($conn);
+        
+        // Return messages array
+        return $messages;
+    } else {
+        //error text
+        echo "Error executing query: " . mysqli_error($conn);
+        return array();
+    }
+    }
+
+
+
+
+function createConversation($conversation, $user_id, $user_img, $other_img){
+    //outputs an entire series of messages as a conversation. 
     foreach ($conversation as $message) {
         if($message['sender_user_id']==$user_id){
             displaySentMessage($user_img, $message['message']);
@@ -93,10 +83,6 @@ function displaySentMessage($imageUrl, $message){
     </div>
 </div>'
   ;
-}
-
-function runTest(){
-    createConversation(testConversation(), 22);
 }
 
 
