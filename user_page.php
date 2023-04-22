@@ -57,7 +57,7 @@ require_once('php_messages.php');
           <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="search_page.php">Search For Items</a>
+          <a class="nav-link" href="./search_page.php">Search For Items</a>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>

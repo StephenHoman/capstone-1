@@ -87,7 +87,7 @@ $searchType = isset($_GET['searchType']) ? $_GET['searchType'] : 'items';
             <input type="text" class="form-control me-2" name="search" placeholder="search here" value="<?php echo $_SESSION['search'] ?? ''; ?>">
             <input type="hidden" name="searchType" value="<?php echo $searchType; ?>">
             <button type="submit" name="save" class="btn btn-outline-success" >Submit</button>
-      <!--  </form> -->
+        </form>
     </div>
   </div>
 </nav>
@@ -126,7 +126,7 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
     if(!empty($_GET['search'])){
         $searchTerm = "%".$_GET['search']."%";
 
-        $sqlItem = "select i.item_name, i.item_description, i.date_posted, t.tag_name, c.category_id, c.category_name from items i left join item_tags it on it.item_id = i.item_id left join tags t on t.tag_id = it.tag_id left join category c on c.category_id = i.category_id where i.item_name like ? or i.item_description like ? or t.tag_name like ? or c.category_name like ?";
+        $sqlItem = "select i.item_name, i.item_description, i.date_posted, t.tag_name, c.category_name from items i left join item_tags it on it.item_id = i.item_id left join tags t on t.tag_id = it.tag_id left join category c on c.category_id = i.category_id where i.item_name like ? or i.item_description like ? or t.tag_name like ? or c.category_name like ?";
         if($stmtItem = mysqli_prepare($conn, $sqlItem)){
             mysqli_stmt_bind_param($stmtItem, 'ssss', $search1, $search2, $search3, $search4);
             $search1 = $searchTerm;
@@ -138,7 +138,7 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
                 $searchErr = "Error executing item search query: " . mysqli_stmt_error($stmtItem);
             }
             else {
-                mysqli_stmt_bind_result($stmtItem, $item_name, $item_description, $date_posted, $tag_name, $category_id, $category_name);
+                mysqli_stmt_bind_result($stmtItem, $item_name, $item_description, $date_posted, $tag_name, $category_name);
                 mysqli_stmt_store_result($stmtItem);
                 $itemResultCount = mysqli_stmt_num_rows($stmtItem);
                 while (mysqli_stmt_fetch($stmtItem)) {
@@ -148,7 +148,6 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
                         "description" => $item_description,
                         "date" => $date_posted,
                         "tag" => $tag_name,
-                        "catid" => $category_id,
                         "category" => $category_name
                     );
                 }
@@ -183,64 +182,28 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
         else {
             $searchErr = "Error preparing user search statement: " . mysqli_error($conn);
         }
-
-        $sqlCategory = "select category_id, category_name from category order by category_name";
-        if($stmtCategory = mysqli_prepare($conn, $sqlCategory)){
-          mysqli_stmt_execute($stmtCategory);
-          if(mysqli_stmt_error($stmtCategory)) {
-            $searchErr = "Error executing category query: " . mysqli_stmt_error($stmtCategory);
-        }
-        else {  
-          mysqli_stmt_bind_result($stmtCategory, $category_category_id, $category_category_name);
-          while (mysqli_stmt_fetch($stmtCategory)) {
-              $searchCategoryResults[] = array(
-                  "type" => "category",
-                  "id"  => $category_category_id,
-                  "name" => $category_category_name
-              );
-          }
-          $categorySuccess = true;
-
-        }
-        }
-
-
             //// added this for pagination, tried to count off from all items 
             // where types were different but couldnt get it to work 
             $searchResultsItems = array();
             $searchResultsUsers = array();
-            
-              foreach ($searchResults as $result) {
-                  if ($result['type'] == 'item' && isset($_GET['categories'])) {
-                      $cat_id = $_GET['categories'];
-                      if ($cat_id == $result['catid'] || $cat_id == -1) {
-                        $searchResultsItems[] = array(
-                            "type" => "item",
-                            "name" => $result['name'],
-                            "description" => $result['description'],
-                            "date" => $result['date'],
-                            "tag" => $result['tag'],
-                            "category" => $result['category']
-                        );
-                      }
-                  } elseif ($result['type'] == 'item') {
-                    $searchResultsItems[] = array(
-                        "type" => "item",
-                        "name" => $result['name'],
-                        "description" => $result['description'],
-                        "date" => $result['date'],
-                        "tag" => $result['tag'],
-                        "category" => $result['category']
-                    );
-                  } elseif ($result['type'] == 'user') {
-                    $searchResultsUsers[] = array(
-                        "type" => "user",
-                        "name" => $result['name'],
-                        "id" => $result['id']
-                    );
-                }
 
-              }
+              foreach ($searchResults as $result) {
+                  if ($result['type'] == 'item') {
+                      $searchResultsItems[] = array(
+                          "type" => "item",
+                          "name" => $result['name'],
+                          "description" => $result['description'],
+                          "date" => $result['date'],
+                          "tag" => $result['tag'],
+                          "category" => $result['category']
+                      );
+                  } elseif ($result['type'] == 'user') {
+                      $searchResultsUsers[] = array(
+                          "type" => "user",
+                          "name" => $result['name'],
+                          "id" => $result['id']
+                      );
+                  }
                   
               }//// end of this loop
                   if(count($searchResultsItems) <= 0)
@@ -251,9 +214,8 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
                   {
                     $userSuccess = false; 
                   }
-              
         }
-    
+    }
 
 ?>
 <div class="col py-3">
@@ -314,17 +276,8 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
 
   <?php if ($searchType === 'items' && isset($_GET['search']) && ($_GET['search'] !== '') && isset($queryParams['search']) && isset($queryParams['searchType'])) {
     echo '<div class="spaced">';
-    echo  'Item Search Results: '.$itemResultCount.'<br>' ;
-    echo '<label for="categories">Select a Category to refine your search: &nbsp</label>';
-    echo '<select name="categories" id="categories" onchange="this.form.submit()">';
-      echo '<option value="-1">All Categories</option>';
-      foreach ($searchCategoryResults as $Category):
-        echo '<option value="'.$Category['id'].'"'; if(isset($_GET['categories']) && $_GET['categories'] == $Category['id']) { echo ' selected ';}  echo '>'.$Category['name'].'</option>';
-      endforeach;
-
-    echo '</select>';
-    
-    echo '</div></br>';
+    echo  'Item Search Results: '.$itemResultCount ;
+    echo '</div>';
     if( !$itemSuccess)
     { ?>
         <div class="container"> 
@@ -564,7 +517,7 @@ $pagedResults = array_slice($searchResultsUsers, $startIndex, $itemsPerPage);
   <?php } ?>
   </div><!-- Div Main End -->
 
-  </form>
+
 
 
     

@@ -58,7 +58,7 @@ CREATE TABLE users_image (
 
 CREATE TABLE category (
 	category_id INT NOT NULL AUTO_INCREMENT,
-    category_name VARCHAR(20) NOT NULL,
+    category_name VARCHAR(30) NOT NULL,
     PRIMARY KEY (category_id)
 )
 AUTO_INCREMENT = 100;
@@ -159,8 +159,6 @@ INSERT INTO users VALUES ('103', 'Today is Sunday, which means tomorrow is Monda
 INSERT INTO users VALUES ('104', 'I started drinking when I was sixteen, but I''m European.', 'hodyuk79@boranora.com', '104', '181', '7105 Vale St.', 'Unit 21', 'PA', 'Allison Park', '15101', '2023-03-12', '2023-03-12', '7', '0');
 INSERT INTO users VALUES ('105', 'I pick you up in front of the hotel.', 'tarohanzawa@gotcertify.com', '105', '188', '789 Howard Court', 'Apartment 17', 'NY', 'Ozone Park', '11417', '2023-03-12', '2023-03-13', '66', '1');
 
-
-
 INSERT INTO users_login VALUES ('100', '100');
 INSERT INTO users_login VALUES ('101', '101');
 INSERT INTO users_login VALUES ('102', '102');
@@ -173,12 +171,26 @@ INSERT INTO users_image VALUES ('102', '177');
 INSERT INTO users_image VALUES ('103', '179');
 INSERT INTO users_image VALUES ('104', '181');
 
-INSERT INTO category VALUES ('100', 'clothing');
-INSERT INTO category VALUES ('101', 'tech');
-INSERT INTO category VALUES ('102', 'books');
-INSERT INTO category VALUES ('104', 'movies');
-INSERT INTO category VALUES ('109', 'toys');
-INSERT INTO category VALUES ('111', 'other');
+INSERT INTO category VALUES ('100', 'Antiques');
+INSERT INTO category VALUES ('101', 'Appliances');
+INSERT INTO category VALUES ('102', 'Arts & Crafts');
+INSERT INTO category VALUES ('103', 'Books, Magazines & Comics');
+INSERT INTO category VALUES ('104', 'Clothing & Accessories');
+INSERT INTO category VALUES ('105', 'Collectibles');
+INSERT INTO category VALUES ('106', 'Electronics');
+INSERT INTO category VALUES ('107', 'Food & Drink');
+INSERT INTO category VALUES ('108', 'Furniture');
+INSERT INTO category VALUES ('109', 'Health & Beauty');
+INSERT INTO category VALUES ('110', 'Home Goods');
+INSERT INTO category VALUES ('111', 'Jewelry');
+INSERT INTO category VALUES ('112', 'Movies & TV');
+INSERT INTO category VALUES ('113', 'Music');
+INSERT INTO category VALUES ('114', 'Musical Instruments');
+INSERT INTO category VALUES ('115', 'Sporting Goods');
+INSERT INTO category VALUES ('116', 'Tools');
+INSERT INTO category VALUES ('117', 'Toys & Games');
+INSERT INTO category VALUES ('118', 'Vehicle');
+INSERT INTO category VALUES ('119', 'Other');
 
 INSERT INTO tags VALUES ('104', 'nintendo');
 INSERT INTO tags VALUES ('106', 'harrypotter');
@@ -186,11 +198,11 @@ INSERT INTO tags VALUES ('111', 'mug');
 INSERT INTO tags VALUES ('112', 'tennis');
 INSERT INTO tags VALUES ('116', 'fishing');
 
-INSERT INTO items VALUES ('100', 'jar of peanut butter', 'This glass is breakable.', '100', '104', '2.77', '100', '100', '2023-02-08', '1', '0', '0');
-INSERT INTO items VALUES ('101', 'mouse pad', 'She loved Thailand so much that she seriously considered never going home.', '104', '106', '300.01', '101', '100', '2023-02-08', '0', '1', '1');
-INSERT INTO items VALUES ('102', 'martini glass', 'The sun comes up in the east.', '109', '111', '15.99', '102', '101', '2023-02-10', '0', '1', '0');
-INSERT INTO items VALUES ('103', 'baseball hat', 'The box was wrapped in paper with tiny silver and red glitter dots.', '102', '104', '23.87', '103', '102', '2023-02-11', '0', '1', '0');
-INSERT INTO items VALUES ('104', 'keyboard', 'Get away from me, you slimy little worm!', '111', '112', '61.04', '105', '105', '2023-02-21', '0', '0', '0');
+INSERT INTO items VALUES ('100', 'Jar of Peanut Butter', 'This glass is breakable.', '107', '104', '2.77', '100', '100', '2023-02-08', '1', '0', '0');
+INSERT INTO items VALUES ('101', 'Mouse Pad', 'She loved Thailand so much that she seriously considered never going home.', '106', '106', '300.01', '101', '100', '2023-02-08', '0', '1', '1');
+INSERT INTO items VALUES ('102', 'Martini Glass', 'The sun comes up in the east.', '110', '111', '15.99', '102', '101', '2023-02-10', '0', '1', '0');
+INSERT INTO items VALUES ('103', 'Baseball Hat', 'The box was wrapped in paper with tiny silver and red glitter dots.', '104', '104', '23.87', '103', '102', '2023-02-11', '0', '1', '0');
+INSERT INTO items VALUES ('104', 'Keyboard', 'Get away from me, you slimy little worm!', '106', '112', '61.04', '105', '105', '2023-02-21', '0', '0', '0');
 
 INSERT INTO item_images VALUES ('100', '100');
 INSERT INTO item_images VALUES ('101', '101');
