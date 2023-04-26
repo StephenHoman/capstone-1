@@ -73,13 +73,10 @@ $searchType = isset($_GET['searchType']) ? $_GET['searchType'] : 'items';
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="user_page.php">Dashboard</a>
+          <a class="nav-link" href="user_page.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Search For Items</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          <a class="nav-link active" aria-current="page" href="#">Search</a>
         </li>
       </ul>
  
@@ -101,7 +98,7 @@ $searchType = isset($_GET['searchType']) ? $_GET['searchType'] : 'items';
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
+                        <a href="user_page.php" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline"><?php echo $_SESSION["username"]; ?></span>
                         </a>
                     </li>
@@ -398,8 +395,12 @@ if(isset($_GET['save']) || isset($_GET['searchType'])) {
                         </div>
                         <div class="row">
                           <div class="col-12">
-                            <p>Posted by: <a href="public_user.php?username=<?php echo $item_images[$result["name"]]["user_username"]; ?>"><?php echo $item_images[$result["name"]]["user_username"]; ?></a></p>
-                          </div>
+                          <?php if( $_SESSION["username"] == $item_images[$result["name"]]["user_username"] ) { ?>
+                            <p>Posted by:<?php echo $item_images[$result["name"]]["user_username"]; ?> </p>
+                          <?php } else {?>
+                            <p>Posted by: <a  style="text-decoration:none" href="public_user.php?username=<?php echo $item_images[$result["name"]]["user_username"]; ?>"><?php echo $item_images[$result["name"]]["user_username"]; ?></a></p>
+                            <?php }?>
+                           </div>
                         </div>
                         <div class="row">
                           <div class="col-12"><p>Tag: <?php echo $result["tag"]; ?></p></div>
@@ -520,8 +521,12 @@ $pagedResults = array_slice($searchResultsUsers, $startIndex, $itemsPerPage);
                   <div class="col text-center-vert">
                     <div class="row">
                       <div class="col-12">
-                        <h4><?php echo $result["name"]; ?></h4>
-                      </div>
+                        <?php if( $_SESSION["username"] == $result["name"] ) { ?>
+                          <h4><?php echo $result['name']; ?> </h4>
+                          <?php } else {?>
+                            <h4><a  style="text-decoration:none" href="public_user.php?username=<?php echo $result["name"]; ?>"><?php echo $result["name"]; ?></a></h4>
+                            <?php }?>
+                          </div>
                     </div>
                   </div>
                 </div>

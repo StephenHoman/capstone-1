@@ -2,7 +2,7 @@
 // Initialize the session
 session_start();
 
-// Check if the user is logged in, if not then redirect him to login page
+// Check if the user is logged in, if not then redirect them to login page
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: index.php");
     exit();
@@ -11,12 +11,12 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 <?php
 require_once "dBCred.PHP";
 require_once "php_update_user.php";
-
+require_once "update_recipient_id.php";
 require_once('php_messages.php');
-
+$recipient_id = '100'; 
+ 
 ?>
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -40,8 +40,68 @@ require_once('php_messages.php');
         size();
           });
         </script>
+ <?php
+            // Prepare a select statement
+            $sql = "SELECT * FROM mydatabase.users WHERE login_id = ?";
+            if ($stmt = mysqli_prepare($conn, $sql)) {
+                // Bind variables to the prepared statement as parameters
+                mysqli_stmt_bind_param($stmt, "s", $param_id);
+                $param_id = $_SESSION["id"];
+                if (mysqli_stmt_execute($stmt)) {
+                    // Store result
+                    mysqli_stmt_store_result($stmt); // Check if username exists, if yes then verify password
+                    if (mysqli_stmt_num_rows($stmt) == 1) {
+                        // Bind result variables
+                        mysqli_stmt_bind_result(
+                            $stmt,
+                            $user_id,
+                            $user_description,
+                            $email,
+                            $login_id,
+                            $image_id,
+                            $address_line_one,
+                            $address_line_two,
+                            $state,
+                            $city,
+                            $zip_code,
+                            $account_creation_date,
+                            $last_online,
 
-    <title>Dashboard</title>
+                            $transaction_count,
+                            $premium
+                        );
+                        while (mysqli_stmt_fetch($stmt)) {
+ 
+                            $_SESSION["USERID"] = $user_id;
+                            $_SESSION["LOGINID"] = $login_id;
+                            $_SESSION["IMAGEID"] = $image_id;
+                            $_SESSION["PREMIUM"] = $premium;
+                        }
+                        mysqli_stmt_close($stmt);
+                    }
+                }
+            }
+            $sql = "SELECT image_url FROM mydatabase.images WHERE image_id = ?";
+            if ($stmt = mysqli_prepare($conn, $sql)) {
+                // Bind variables to the prepared statement as parameters
+                mysqli_stmt_bind_param($stmt, "s", $param_id);
+                $param_id = $image_id;
+                if (mysqli_stmt_execute($stmt)) {
+                    // Store result
+                    mysqli_stmt_store_result($stmt);  
+                    if (mysqli_stmt_num_rows($stmt) == 1) {
+                        // Bind result variables
+                        mysqli_stmt_bind_result($stmt, $image_url);
+                        while (mysqli_stmt_fetch($stmt)) {
+                            $_SESSION["image_url"] = $image_url;
+                         }
+                    }
+                    mysqli_stmt_close($stmt);
+                }
+            }
+            require_once "checkFK.php";
+            ?>
+    <title>Home</title>
   </head>
   <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -54,14 +114,12 @@ require_once('php_messages.php');
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+          <a class="nav-link active" aria-current="page" href="user_page.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./search_page.php">Search For Items</a>
+          <a class="nav-link" href="./search_page.php">Search</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
+         
       </ul>
        
     </div>
@@ -78,31 +136,27 @@ require_once('php_messages.php');
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                  
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <a href="user_page.php" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">#<?php echo $_SESSION[
                         "id"
                     ]; ?> - <?php echo $_SESSION["username"]; ?> </span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                     <?php if(( 1 == 1) )  { ?>
-                    <li>
-                        <a href="#submenu1" data-bs-toggle="collapse" role="button" class="nav-link px-0 align-start">
+                     <?php if(($_SESSION["PREMIUM"] == '1') )  { ?>
+                        <li class="w-100">
+                        <a href="Dashboard.php" class="nav-link px-0" >
                             <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">Dashboard</span> </a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-
-
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Item</span> 1 </a>
+                              </span>
+                            </a>     
+                        
+                    
                             </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="ms-1 nav-link px-0 align-middle d-sm-inline">Item</span> 2 </a>
-                            </li>
-                        </ul>                        
+            
                     </li>
                         <?php }?>
-                        <!-- messageModal button -->
+                        <!-- message  button -->
                         <li class="w-100">
-                    <a href="#" class="nav-link px-0" data-bs-toggle="modal" data-bs-target="#messageModal">
+                    <a href="user_messages.php" class="nav-link px-0" >
                         <i class="fs-4 bi bi-envelope"></i>
                         <span class="ms-1 nav-link px-0 align-middle d-sm-inline collapse">
                         <button type="button" class="styledBtn btn btn-primary">Messages</button>
@@ -153,94 +207,12 @@ require_once('php_messages.php');
         
             
         <div class="form-group mb-3">
-        <?php /*if (isset($_SESSION["username"])): ?>
-             <?php echo $_SESSION["id"]; ?> 
-             <?php echo $_SESSION["username"]; ?> 
-             <?php endif;*/ ?>     
+      
 
         </div>
         
         <div class="text-center mb-3">
-            <?php
-            // Prepare a select statement
-            $sql = "SELECT * FROM mydatabase.users WHERE login_id = ?";
-            if ($stmt = mysqli_prepare($conn, $sql)) {
-                // Bind variables to the prepared statement as parameters
-                mysqli_stmt_bind_param($stmt, "s", $param_id);
-                $param_id = $_SESSION["id"];
-                if (mysqli_stmt_execute($stmt)) {
-                    // Store result
-                    mysqli_stmt_store_result($stmt); // Check if username exists, if yes then verify password
-                    if (mysqli_stmt_num_rows($stmt) == 1) {
-                        // Bind result variables
-                        mysqli_stmt_bind_result(
-                            $stmt,
-                            $user_id,
-                            $user_description,
-                            $email,
-                            $login_id,
-                            $image_id,
-                            $address_line_one,
-                            $address_line_two,
-                            $state,
-                            $city,
-                            $zip_code,
-                            $account_creation_date,
-                            $last_online,
-
-                            $transaction_count,
-                            $premium
-                        );
-                        while (mysqli_stmt_fetch($stmt)) {
-                           /* printf(
-                                " %d %s %s %d %d %s %s %s %s %d %d %d %d %d \n",
-                                $user_id,
-                                $user_description,
-                                $email,
-                                $login_id,
-                                $image_id,
-                                $address_line_one,
-                                $address_line_two,
-                                $state,
-                                $city,
-                                $zip_code,
-                                $account_creation_date,
-                                $last_online,
-
-                                $transaction_count,
-                                $premium
-                            );
-                            echo $email . "<br>";*/
-                            $_SESSION["USERID"] = $user_id;
-                            $_SESSION["LOGINID"] = $login_id;
-                            $_SESSION["IMAGEID"] = $image_id;
-                            $_SESSION["PREMIUM"] = $premium;
-                        }
-                        mysqli_stmt_close($stmt);
-                    }
-                }
-            }
-            $sql = "SELECT image_url FROM mydatabase.images WHERE image_id = ?";
-            if ($stmt = mysqli_prepare($conn, $sql)) {
-                // Bind variables to the prepared statement as parameters
-                mysqli_stmt_bind_param($stmt, "s", $param_id);
-                $param_id = $image_id;
-                if (mysqli_stmt_execute($stmt)) {
-                    // Store result
-                    mysqli_stmt_store_result($stmt);  
-                    if (mysqli_stmt_num_rows($stmt) == 1) {
-                        // Bind result variables
-                        mysqli_stmt_bind_result($stmt, $image_url);
-                        while (mysqli_stmt_fetch($stmt)) {
-                            $_SESSION["image_url"] = $image_url;
-                           // printf("%s \n", $image_url);
-                        }
-                    }
-                    mysqli_stmt_close($stmt);
-                }
-            }
-            require_once "checkFK.php";
-            ?>
+            
         </div>
         <div class="container text-left">
                 <div class="row">
@@ -545,10 +517,26 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
 
 <!-- messagemodal start --> 
 <!-- The Modal -->
+<?php
+$sql = "SELECT u.user_id, l.user_username 
+FROM Login l 
+JOIN Users u ON l.login_id = u.login_id 
+JOIN Messages m ON (u.user_id = m.sender_user_id OR u.user_id = m.receiver_user_id) AND (m.sender_user_id = ? OR m.receiver_user_id = ?)
+WHERE u.user_id != ?";
+if ($stmt = mysqli_prepare($conn, $sql)) {
+mysqli_stmt_bind_param($stmt, "iii", $user_id, $user_id, $user_id);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_bind_result($stmt, $message_user_id, $message_user_username);
+$message_usernames = array();
+while (mysqli_stmt_fetch($stmt)) {
+ $message_usernames[$message_user_id] = $message_user_username;
+}
+mysqli_stmt_close($stmt);
+}?>
 <div class="modal" id="messageModal">
   <div class="modal-dialog">
     <div class="modal-content">
-
+  
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Messages</h4>
@@ -557,41 +545,137 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
       <?php  ?>
       <!-- Modal body -->
       <div class="modal-body">
+       
+             
+
+
+
+        <div class="card" style="width: 100%; max-height: 500px;" >
+        <div class="col-md-6">
+         
+        <select name="selected_value" class="form-select" id="select_box">
+        <option value="">Select Username</option>
+        <?php echo $recipient_id;?>
+        <?php foreach($message_usernames as $message_user_id => $message_user_username): ?>
+            <option value="<?= $message_user_id ?>"><?= $message_user_username ?></option>
+        <?php endforeach; ?>  
+        </select>
+    
+        </div>
+  <script>
+  // Get a reference to the select element
+  var selectBox = document.getElementById("select_box");
+
+  // Add an event listener for the "change" event
+  selectBox.addEventListener("change", function() {
+    // Get the selected value
+    var selectedValue = selectBox.value;
+
+    // Send an AJAX request to update the recipient ID
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "user_messages.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        // Update the value of $recipient_id
+        var recipientId = xhr.responseText;
+        console.log(recipientId);
+      }
+    };
+    xhr.send("selected_value=" + selectedValue);
+  });
+</script>
+
+<?php 
+ 
+ // Check if the selected value was posted
+
+ ?>
+ 
+ 
+  
+    
+ 
+  
+        
+                <?// this and the next line with overflow-auto are the parts that enable the page to be able to scroll?> 
         <div class="card" style="width: 100%; max-height: 500px;" > <?// this and the next line with overflow-auto are the parts that enable the page to be able to scroll?> 
                 <div class="card-body overflow-auto">
       <div class="container "><?// container  ?> 
-                
-                <div class="row"> <?// each row is for one message, this will be populated 
-                // with information from the database but for an example it is easy to see 
-                // how it will look here ?>
-                            
+                 
+                <!-- message thread start-->
+                <?php
+// Get the messages between the user and the selected recipient
+$sql = "SELECT * FROM Messages WHERE (sender_user_id = ? AND receiver_user_id = ?) OR (sender_user_id = ? AND receiver_user_id = ?) ORDER BY date_time_sent ASC";
+if ($stmt = mysqli_prepare($conn, $sql)) {
+    mysqli_stmt_bind_param($stmt, "iiii", $user_id, $recipient_id, $recipient_id, $user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
-                  <?  
-                   // message box 
-                  
-                  ?>
+    // Loop through the messages and display them
+    while ($row = mysqli_fetch_assoc($result)) {
+        // Determine the sender and recipient
+        if($row['sender_user_id'] == $user_id)
+        {?>
+            <div class="row"> 
+            <div class="col-2 " style="background-color: pink;">
+             
+            </div>
+
+            <div class="col-1 " style="background-color: pink;">
+             
+            </div>
+
+            <div class="col-7 text-end" style="background-color: green;">
+            <?php echo $row["message"]; ?>
+            </div>
+
+            <div class="col-2">
+            <img src="Session User" class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+            </div>
+            </div>
+            <?
+        }else 
+        {
+            ?>
+            <div class="row">  
+                    <div class="col-2">
+                        <img src="recipient image " class="rounded-circle img-profile embed-responsive " id="profile" alt="profile image"> 
+                    </div>
+                    <div class="col-7 text-start" style="background-color: green;">
+                            <?php echo $row["message"]; ?>
+                    </div>
+                    <div class="col-1 " style="background-color: pink;">
+                     
+                    </div>
+                    <div class="col-2 " style="background-color: pink;">
+                             
+                            </div>
                   
                 </div>
-                
+            <?php
+        }
+         
+ 
+    }
+
+    mysqli_stmt_close($stmt);
+}
+?> 
+                <!-- message thread end --> 
 
 
        </div><?// container  ?> 
         </div><?//end card ?>
             </div><?//end card body ?>
-            <label for="comment">Comments:</label>
-            <textarea class="form-control" rows="5" id="comment" name="text"></textarea> 
-
-         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST" enctype="multipart/form-data">
-           <h3 class="mb-4"> <?php echo $_SESSION["username"]; ?> </h3>
-           
-           
-
-
-         </form>
-         
             
-
-
+            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST" enctype="multipart/form-data">
+            <textarea class="form-control" rows="5" id="comment" name="text"></textarea> 
+            <input type="hidden" name="recipient_id" value="<?= $recipient_id ?>">
+            <input type="hidden" name="sender_id" value="<?= $user_id ?>">
+            <button type="submit" name="submit_message">Send Message</button>
+            </form>
+ 
       </div>
 
       <!-- Modal footer -->
@@ -601,7 +685,8 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
     </div>
 
   </div>
-</div>
+    </div>
+    </div></div>
 <!-- message modal end --> 
 
 

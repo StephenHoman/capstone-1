@@ -1,6 +1,5 @@
 <?php
 // Initialize the session
-//session_destroy();
 session_start();
  
 // Tell server that you will be tracking session variables
@@ -11,7 +10,10 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 ?>
  <?php
     // Check for errors and set session variable
-    $_SESSION['login_error'];
+    if(!isset($_SESSION["login_error"]))
+    {
+      $_SESSION["login_error"] = false;
+    }
  
  
     require_once("dBCred.PHP");

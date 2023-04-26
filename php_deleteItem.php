@@ -1,7 +1,7 @@
 <?php
 require_once "dBCred.PHP";
 
-// Get the item name from the POST parameters
+// Get the item name from POST
 $itemName = mysqli_real_escape_string($conn, $_POST["itemName"]);
 
 // Start a transaction

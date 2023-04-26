@@ -7,13 +7,14 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_
     header("location: index.php");
     exit();
 }
-
+if ( $_SESSION["username"] == $_GET['username']){
+    header("location: search_page.php");
+}
 ?>
 <?php
 require_once "dBCred.PHP";
-require_once "php_update_user.php";
-
-require_once('php_messages.php');
+//require_once "php_update_user.php";
+ 
 
 ?>
 
@@ -29,7 +30,7 @@ require_once('php_messages.php');
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <!-- JS Scripts -->
     <script src="script.js"></script> 
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
         // fixes sizing issue when page is scaled to under 768px, the profile image would 
         // no longer flex correctly. This bit quickly fixes it. 
@@ -70,7 +71,7 @@ require_once('php_messages.php');
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <a href="user_page.php" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">#<?php echo $_SESSION["id"]; ?> - <?php echo $_SESSION["username"]; ?> </span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
@@ -209,15 +210,164 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                 </div>
                 </div>
              </div>
-          
+          <br></br>
+        <div class="container text-left">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h2> Start a conversation <h2>
+                </div>
+                <div class="col-12 ">
+                    <div class="card card_style">
+                    <div class="card-body">
+                    <div class=" py-3">
+             
+                    
+                        <div>
+                        <form id="message-form">
+                        <textarea class="form-control" rows="5" id="comment" name="text"></textarea> 
+                        <input type="hidden" name="recipient_id" value="<?= $user_id ?>">
+                        <input type="hidden" name="sender_id" value="<?= $_SESSION["USERID"] ?>">
+                        <button type="submit" name="submit_message">Send Message</button>
+                        </form>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+             </div>
           
  
+<script>
+$(function() {
+  // Handle form submission using AJAX
+  $('#message-form').on('submit', function(e) {
+    e.preventDefault();
+    var formData = $(this).serialize();
+    $.ajax({
+      type: 'POST',
+      url: 'php_messages.php',
+      data: formData,
+      success: function(response) {
+        // Handle successful response here (e.g. display a success message)
+        console.log(response);
+        $("#comment").val("");
+      },
+      error: function(xhr, status, error) {
+        // Handle error response here (e.g. display an error message)
+        console.log(xhr.responseText);
+        $("#message-status").html(response).addClass("success").fadeIn();
+      }
+    });
+  });
+});
+</script>
  
  
  
          </div>
         </div>
+
+
 </div>
+</div>
+    </div>
+    <?php
+$user_id; // replace with the desired user ID
+$sql = "SELECT item_name, item_description, category_id, tag_id, item_price, image_id, user_id, date_posted, premium_status, featured_item, sold
+        FROM Items
+        WHERE user_id = ?";
+if ($stmt = mysqli_prepare($conn, $sql)) {
+    mysqli_stmt_bind_param($stmt, 'i', $user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    while ($row = mysqli_fetch_assoc($result)) {
+?>
+        <div class="container text-left">
+            <div class="row">
+          
+                 <script>
+
+                    </script>
+                 
+                    <div class="card item_card">
+                        <div class="card-header">
+                            <div class="container">
+                            <div class="row">
+                            <div class="col-4 text-start"><?php echo $row['item_name']; ?></div>
+                            <div class="col-4 text-center"> </div>
+                            <div class="col-4 text-end"><button type="button" class="btn-close  " aria-label="Close" id="<?php echo $row['item_name']; ?>" onclick="deleteItem(this.id)"></button></div>
+
+                            </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="py-3">
+                                <div class="row">
+                                <div class="col-4 col-sm-4 col-md-4">
+
+                                    <?php
+                                      $image_id = $row['image_id'];
+                                        $sql2 = "SELECT image_url FROM images WHERE image_id = ?";
+                                        if ($stmt2 = mysqli_prepare($conn, $sql2)) {
+                                            mysqli_stmt_bind_param($stmt2, 'i', $image_id);
+                                            mysqli_stmt_execute($stmt2);
+                                            $result2 = mysqli_stmt_get_result($stmt2);
+                                            if ($row2 = mysqli_fetch_assoc($result2)) {
+                                            $image_url = $row2['image_url'];
+                                            } else {
+                                            $image_url = "photos/profile_image/default.webp"; // Replace with your default image URL
+                                            }
+                                            mysqli_stmt_close($stmt2);
+                                        } else {
+                                            $image_url = "photos/profile_image/default.webp"; // Replace with your default image URL
+                                        }
+                                        ?>
+                                        <img src="<?php echo $image_url; ?>" class="img-rounded  img-item embed-responsive" alt="item image">
+                                         </div>
+
+
+                                    <div class="col-8">
+                                        <div class="row">
+                                            <div class="col">
+                                                <strong>Item Description:</strong> <?php echo $row['item_description']; ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <strong>Category ID:</strong> <?php echo $row['category_id']; ?>
+                                            </div>
+                                            <div class="col">
+                                                <strong>Tag ID:</strong> <?php echo $row['tag_id']; ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <strong>Item Price:</strong> <?php echo $row['item_price']; ?>
+                                            </div>
+                                            <div class="col">
+                                                <strong>Premium Status:</strong> <?php echo $row['premium_status']; ?>
+                                            </div>
+                                            <div class="col">
+                                                <strong>Featured Item:</strong> <?php echo $row['featured_item']; ?>
+                                            </div>
+                                            <div class="col">
+                                                <strong>Sold:</strong> <?php echo $row['sold']; ?>
+                                            </div>
+                                            </div>
+                                    </div>
+                                    </div>
+                            </div>
+
+                    </div>
+              
+            </div>
+    </div>
+        </div>
+<?php 
+    }
+    mysqli_stmt_close($stmt);
+}
+?> 
+
 
  
 
@@ -227,7 +377,6 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>  </body>
 </html>

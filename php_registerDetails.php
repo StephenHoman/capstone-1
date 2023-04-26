@@ -135,6 +135,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
         if(empty($username_err) && empty($password_err) && empty($confirm_password_err) )
         {   
+            $user_id          = $_SESSION["id"]; 
             $email = isset($_POST["email"]) ? trim($_POST["email"]) : '';
 
             $login_id         = trim($_POST["login_id"]);
@@ -148,12 +149,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             $transaction_count= 0;
             $premium_user     = 0;
             // Prepare an insert statement
-              $sql = "INSERT INTO mydatabase.users (user_id, user_description, email, login_id, image_id, address_line_one, users.state, city, zip_code, account_creation_date, last_online, transaction_count, premium_user) VALUES (Null, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), CURDATE(), ?, ?)";
+              $sql = "INSERT INTO mydatabase.users (user_id, user_description, email, login_id, image_id, address_line_one, users.state, city, zip_code, account_creation_date, last_online, transaction_count, premium_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), CURDATE(), ?, ?)";
                
               if($stmt = mysqli_prepare($conn, $sql)){
                   // Bind variables to the prepared statement as parameters
-                  mysqli_stmt_bind_param($stmt, "sssisssiii",  $param_user_description, $param_email, $param_login_id, $param_image_id, $param_address_line_one, $param_state, $param_city, $param_zip, $param_transaction_count, $param_premium_user);
-                  
+                  mysqli_stmt_bind_param($stmt, "isssisssiii", $param_user_id, $param_user_description, $param_email, $param_login_id, $param_image_id, $param_address_line_one, $param_state, $param_city, $param_zip, $param_transaction_count, $param_premium_user);
+                  $param_user_id = $user_id;
                   $param_user_description = $user_description;
                   $param_email = $email;
                   $param_login_id = $login_id;

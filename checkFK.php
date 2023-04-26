@@ -1,5 +1,5 @@
 <?php
-
+// This file does some general cleanup on the first login of the user
 require_once("dBCred.PHP");
 
 if (isset($_SESSION['LOGINID']) && isset($_SESSION['USERID'])){
