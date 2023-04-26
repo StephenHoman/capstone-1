@@ -11,8 +11,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 <?php
 require_once "dBCred.PHP";
 require_once "php_update_user.php";
-require_once "update_recipient_id.php";
-require_once('php_messages.php');
+//require_once('php_messages.php');
   
 ?>
  <!DOCTYPE html>
@@ -250,14 +249,47 @@ mysqli_stmt_close($stmt);
     });
   }, 1000); // 5000 milliseconds = 5 seconds
 
+  $(document).ready(function() {
+  $("select[name='selected_value']").change(function() {
+    var recipientId = $(this).val();
+    $("#recipient_id").val(recipientId);
+   });
+    });
+
+
+
+  $(document).ready(function() {
+  $("#message-form").submit(function(e) {
+    e.preventDefault(); // prevent the form from submitting normally
+    
+    // get the form data
+    var formData = $(this).serialize();
+    
+    // make the ajax call
+    $.ajax({
+      url: "php_messages.php",
+      type: "POST",
+      data: formData,
+      dataType: "json",
+      success: function(response) {
+        // Handle successful response here (e.g. display a success message)
+        console.log(response);
+        $("#comment").val("");
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+      }
+    });
+  });
+});
+
+
+
+
 </script>
  
 <?php 
- 
- // Check if the selected value was posted
- if(isset($_SESSION['recipient_id'])){
- $recipient_id = $_SESSION['recipient_id'];
-}
+  
  ?>
 
         
@@ -272,10 +304,10 @@ mysqli_stmt_close($stmt);
             </div><?//end card body ?>
             <form id="message-form">
             <textarea class="form-control" rows="5" id="comment" name="text"></textarea> 
-            <input type="hidden" name="recipient_id" value="<?= $recipient_id ?>">
+            <input type="hidden" name="recipient_id" id="recipient_id" value="<?= $_SESSION['recipient_id'] ?>">
             <input type="hidden" name="sender_id" value="<?= $user_id ?>">
-            <button type="submit" name="submit_message">Send Message</button>
-        </form>
+            <button type="submit">Send Message</button>
+          </form>
 
 
  
@@ -296,31 +328,6 @@ mysqli_stmt_close($stmt);
     </div>
 </div>
  
-<script>
-$(function() {
-  // Handle form submission using AJAX
-  $('#message-form').on('submit', function(e) {
-    e.preventDefault();
-    var formData = $(this).serialize();
-    $.ajax({
-      type: 'POST',
-      url: 'php_messages.php',
-      data: formData,
-      success: function(response) {
-        // Handle successful response here (e.g. display a success message)
-        console.log(response);
-        $("#comment").val("");
-      },
-      error: function(xhr, status, error) {
-        // Handle error response here (e.g. display an error message)
-        console.log(xhr.responseText);
-        $("#message-status").html(response).addClass("success").fadeIn();
-      }
-    });
-  });
-});
-</script>
-
     
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

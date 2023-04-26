@@ -11,8 +11,7 @@ if ((!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) || ($_SESS
 <?php
 require_once "dBCred.PHP";
 require_once "php_update_user.php";
-require_once "update_recipient_id.php";
-require_once('php_messages.php');
+ require_once('php_messages.php');
   
 ?>
  <!DOCTYPE html>

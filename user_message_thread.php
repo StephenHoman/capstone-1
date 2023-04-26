@@ -4,7 +4,7 @@
 session_start();
 require_once("dBCred.PHP");
 $recipient_id = $_POST['selected_value'];
-
+$_SESSION['recipient_id'] = $_POST['selected_value'];
 // Get the messages between the user and the selected recipient
 
 if(isset($_POST['selected_value']) && isset($_POST['user_id']) ){
