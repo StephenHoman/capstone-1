@@ -31,8 +31,7 @@ if (isset($_GET['search'])) {
 <?php
 require_once "dBCred.PHP";
 require_once "php_update_user.php";
-require_once('php_messaging.php');
-$searchType = isset($_GET['searchType']) ? $_GET['searchType'] : 'items';
+ $searchType = isset($_GET['searchType']) ? $_GET['searchType'] : 'items';
 ?>
 
 <!doctype html>
