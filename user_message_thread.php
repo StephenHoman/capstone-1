@@ -2,7 +2,7 @@
 <!-- message thread start-->
 <?php
 session_start();
-require_once("dBCred.PHP");
+require_once('dBCred.php');
 $recipient_id = $_POST['selected_value'];
 $_SESSION['recipient_id'] = $_POST['selected_value'];
 // Get the messages between the user and the selected recipient
@@ -26,7 +26,7 @@ if(isset($_POST['selected_value']) && isset($_POST['user_id']) ){
 
 
 
-$sql = "SELECT * FROM Messages WHERE (sender_user_id = ? AND receiver_user_id = ?) OR (sender_user_id = ? AND receiver_user_id = ?) ORDER BY date_time_sent ASC";
+$sql = "SELECT * FROM messages WHERE (sender_user_id = ? AND receiver_user_id = ?) OR (sender_user_id = ? AND receiver_user_id = ?) ORDER BY date_time_sent ASC";
 if ($stmt = mysqli_prepare($conn, $sql)) {
     mysqli_stmt_bind_param($stmt, "iiii", $user_id, $recipient_id, $recipient_id, $user_id);
     mysqli_stmt_execute($stmt);

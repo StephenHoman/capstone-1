@@ -1,6 +1,6 @@
 <?php
     // Include config file
-    require_once('DBCred.php');
+    require_once('dBCred.php');
     // Include register file
     require_once('php_register.php');
     require_once('php_registerDetails.php');

@@ -1,6 +1,6 @@
 <?php
 // This file does some general cleanup on the first login of the user
-require_once("dBCred.PHP");
+require_once('dBCred.php');
 
 if (isset($_SESSION['LOGINID']) && isset($_SESSION['USERID'])){
    // echo $_SESSION['LOGINID'];
@@ -25,7 +25,7 @@ if (isset($_SESSION['LOGINID']) && isset($_SESSION['USERID'])){
             //    echo "success";
             }
          else {
-            echo "error1";
+            echo "First Login Config- ";
          
         // Prepare an insert statement
         $sql = "INSERT INTO mydatabase.users_login (login_id, user_id) VALUES (?, ?)";
@@ -42,7 +42,7 @@ if (isset($_SESSION['LOGINID']) && isset($_SESSION['USERID'])){
             if (mysqli_stmt_execute($stmt)) {
                  
             } else {
-                echo "error2";
+                echo "Changes will take effect on refresh ";
             }
 
             // Close statement
@@ -73,7 +73,7 @@ if (isset($_SESSION['USERID']) && isset($_SESSION['IMAGEID'])) {
                // echo "success";
             }
          else {
-            echo "error1";
+            echo "First Login Config- ";
            
         // Prepare an insert statement
         $sql = "INSERT INTO mydatabase.users_image (user_id, image_id) VALUES (?, ?)";
@@ -90,7 +90,7 @@ if (isset($_SESSION['USERID']) && isset($_SESSION['IMAGEID'])) {
             if (mysqli_stmt_execute($stmt)) {
                  
             } else {
-                echo "error2";
+                echo "Changes will take effect on refresh ";
             }
 
             // Close statement

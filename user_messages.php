@@ -9,8 +9,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 }
 ?>
 <?php
-require_once "dBCred.PHP";
-require_once "php_update_user.php";
+    require_once('dBCred.php');
+    require_once "php_update_user.php";
 //require_once('php_messages.php');
   
 ?>
@@ -175,9 +175,9 @@ require_once "php_update_user.php";
 <!-- The Modal -->
 <?php
 $sql = "SELECT u.user_id, l.user_username 
-FROM Login l 
-JOIN Users u ON l.login_id = u.login_id 
-JOIN Messages m ON (u.user_id = m.sender_user_id OR u.user_id = m.receiver_user_id) AND (m.sender_user_id = ? OR m.receiver_user_id = ?)
+FROM login l 
+JOIN users u ON l.login_id = u.login_id 
+JOIN messages m ON (u.user_id = m.sender_user_id OR u.user_id = m.receiver_user_id) AND (m.sender_user_id = ? OR m.receiver_user_id = ?)
 WHERE u.user_id != ?";
 if ($stmt = mysqli_prepare($conn, $sql)) {
 mysqli_stmt_bind_param($stmt, "iii", $user_id, $user_id, $user_id);

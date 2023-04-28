@@ -16,7 +16,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     }
  
  
-    require_once("dBCred.PHP");
+    require_once('dBCred.php');
     require_once("php_login.php");
   ?>
 

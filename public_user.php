@@ -12,8 +12,8 @@ if ( $_SESSION["username"] == $_GET['username']){
 }
 ?>
 <?php
-require_once "dBCred.PHP";
-//require_once "php_update_user.php";
+    require_once('dBCred.php');
+    //require_once "php_update_user.php";
  
 
 ?>

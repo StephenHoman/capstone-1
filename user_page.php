@@ -9,8 +9,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 }
 ?>
 <?php
-require_once "dBCred.PHP";
-require_once "php_update_user.php";
+    require_once('dBCred.php');
+    require_once "php_update_user.php";
  require_once('php_messages.php');
 $recipient_id = '100'; 
  
@@ -285,9 +285,9 @@ $recipient_id = '100';
         </div>
 </div>
 <?php
-$user_id; // replace with the desired user ID
+//$_SESSION["USERID"] = $user_id;
 $sql = "SELECT item_name, item_description, category_id, tag_id, item_price, image_id, user_id, date_posted, premium_status, featured_item, sold
-        FROM Items
+        FROM items
         WHERE user_id = ?";
 if ($stmt = mysqli_prepare($conn, $sql)) {
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
