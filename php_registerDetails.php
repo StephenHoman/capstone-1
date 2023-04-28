@@ -1,6 +1,6 @@
 <?php
-require_once("dBCred.PHP");
-// Define variables and initialize with empty values
+    require_once('dBCred.php');
+    // Define variables and initialize with empty values
 $user_description = $zip_code = $city = $state = $address_line_two = $address_line_one    = "";
 
 
@@ -92,7 +92,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
      
         if (isset($_POST['email'])) {
             // File was uploaded successfully
-            require_once("dBCred.PHP");
+            require_once("dBCred.php");
             $newFileName = uploadProfileImage($_FILES['formFile'], $conn);
             $_SESSION['image_url'] = $newFileName;
             if ($newFileName) {

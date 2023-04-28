@@ -1,6 +1,6 @@
 <?php
-require_once "dBCred.PHP";
-?>
+    require_once('dBCred.php');
+    ?>
 
 
 <!-- Search -->

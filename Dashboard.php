@@ -9,8 +9,8 @@ if ((!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) || ($_SESS
 }
 ?>
 <?php
-require_once "dBCred.PHP";
-require_once "php_update_user.php";
+    require_once('dBCred.php');
+    require_once "php_update_user.php";
  require_once('php_messages.php');
   
 ?>
@@ -65,7 +65,7 @@ require_once "php_update_user.php";
   </div>
 </nav>
 <!-- PHP CODE BELOW FOR ALL VALUES START --> 
-  <?
+  <?php
 // item count 
 $sql = "SELECT count('item_id') as count FROM mydatabase.items";
 $result = mysqli_query($conn, $sql);
@@ -75,8 +75,8 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     echo "0 results";
 }
- // itemcount 
-
+?>
+ <?php
 // user count 
 $sql = "SELECT count('user_id') as count FROM mydatabase.users";
 $result = mysqli_query($conn, $sql);
@@ -85,9 +85,8 @@ if (mysqli_num_rows($result) > 0) {
     $user_count = $row['count'];
 } else {
     echo "0 results";
-}
- // user count
-
+}?>
+ <?php
 // message count 
 $sql = "SELECT count('message') as count FROM mydatabase.messages";
 $result = mysqli_query($conn, $sql);
@@ -98,6 +97,8 @@ if (mysqli_num_rows($result) > 0) {
     echo "0 results";
 }
 // message count
+?>
+<?php
 // Top User  
 $sql="SELECT login.user_username, COUNT(items.item_id) AS item_count
 FROM mydatabase.items
@@ -116,6 +117,8 @@ if (mysqli_num_rows($result) > 0) {
 }
 // Top User 
 
+?>
+<?php
  
   ?>
 <!-- PHP CODE ABOVE FOR ALL VALUES END -->

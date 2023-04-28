@@ -1,8 +1,8 @@
-DROP DATABASE myDatabase;
+DROP DATABASE mydatabase;
 
-CREATE DATABASE myDatabase;
+CREATE DATABASE mydatabase;
 
-USE myDatabase;
+USE mydatabase;
 
 CREATE TABLE login (
 	login_id INT NOT NULL AUTO_INCREMENT,

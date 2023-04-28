@@ -1,5 +1,5 @@
 <?php
-require_once "dBCred.PHP";
+    require_once('dBCred.php');
 
 // Get the item name from POST
 $itemName = mysqli_real_escape_string($conn, $_POST["itemName"]);

@@ -29,8 +29,8 @@ if (isset($_GET['search'])) {
 }
 ?>
 <?php
-require_once "dBCred.PHP";
-require_once "php_update_user.php";
+    require_once('dBCred.php');
+    require_once "php_update_user.php";
  $searchType = isset($_GET['searchType']) ? $_GET['searchType'] : 'items';
 ?>
 

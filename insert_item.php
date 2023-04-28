@@ -1,6 +1,6 @@
 <?php
  
-require_once("dBCred.PHP");
+ require_once('dBCred.php');
 
 $item_name = $price = $category = $tags = '';
 $image_id = $user_id = $category_id = $tag_id = $premium_status = $sold = 0;
@@ -16,7 +16,7 @@ function uploadProfileImage($photoInput, $conn)  {
     $targetFile = $uploadDir . '/' . $hashedName;
     $directory =  $targetFile;
     $_SESSION['image_url'] = $targetFile;
-    require_once("dBCred.PHP");
+    require_once("dBCred.php");
 
     // Move uploaded file to new location with new name
     if(move_uploaded_file($tempName, $targetFile)){
@@ -103,7 +103,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             $featured_item = 0;
             $sold = 0;
 
-            $sql = "insert into Items (item_name, item_description, category_id, tag_id, item_price, image_id, user_id,
+            $sql = "insert into items (item_name, item_description, category_id, tag_id, item_price, image_id, user_id,
                                         date_posted, premium_status, featured_item, sold)
                                 Values('$item_name', '$item_description', $category_id, $tag_id, $price, $image_id,
                                        $user_id, '$date_posted', $premium_status, $featured_item, $sold)";
