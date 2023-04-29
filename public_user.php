@@ -273,7 +273,7 @@ $(function() {
     <?php
 $user_id; // replace with the desired user ID
 $sql = "SELECT item_name, item_description, category_id, tag_id, item_price, image_id, user_id, date_posted, premium_status, featured_item, sold
-        FROM items
+        FROM Items
         WHERE user_id = ?";
 if ($stmt = mysqli_prepare($conn, $sql)) {
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
@@ -294,7 +294,8 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
                             <div class="row">
                             <div class="col-4 text-start"><?php echo $row['item_name']; ?></div>
                             <div class="col-4 text-center"> </div>
- 
+                            <div class="col-4 text-end"><button type="button" class="btn-close  " aria-label="Close" id="<?php echo $row['item_name']; ?>" onclick="deleteItem(this.id)"></button></div>
+
                             </div>
                             </div>
                         </div>
