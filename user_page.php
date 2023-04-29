@@ -9,8 +9,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 }
 ?>
 <?php
-require_once "dBCred.PHP";
-require_once "php_update_user.php";
+   require_once('dBCred.php');
+   require_once "php_update_user.php";
  require_once('php_messages.php');
 $recipient_id = '100'; 
  
